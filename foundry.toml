@@ -1,6 +1,31 @@
 [profile.default]
 src = "src"
 out = "out"
+solc_version = "0.8.20"
 libs = ["lib"]
+remappings = ['@chainlink/contracts/=lib/chainlink-brownie-contracts/contracts/', 
+              '@openzeppelin/contracts=lib/openzeppelin-contracts/contracts',
+              '@openzeppelin/contracts-upgradeable=lib/openzeppelin-contracts-upgradeable/contracts',]
 
-# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+gas_reports = ["EquilibriumCore"]
+# gas_reports_ignore = ["InstanceEquilibriumCore"]
+
+
+[etherscan]
+mainnet = { key = "${ETHERSCAN_API_KEY}" }
+sepolia = {key = "${ETHERSCAN_API_KEY}"}
+
+[rpc_endpoints]
+sepolia = "${SEPOLIA_RPC_URL}"
+
+[invariant]
+runs = 128
+depth = 128
+fail_on_revert = true
+
+fs_permissions = [{ access = "read-write", path = "./deployed_addresses.txt"}]
+
+# IMPORTANT: should be false in production.
+ffi = true
+
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
