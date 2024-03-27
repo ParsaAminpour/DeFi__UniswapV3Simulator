@@ -6,9 +6,13 @@ import {Tick} from "./libraries/Tick.sol";
 import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {SafeCast} from "./libraries/SafeCast.sol";
+import {TickBitmap} from "./libraries/TickBitmap.sol";
+import {TickMath} from "./libraries/TickMath.sol";
+import {SwapMath} from "./libraries/SwapMath.sol";
+import { InternalMath } from "./libraries/InternalMath.sol";
 import {IUniswapV3MintCallback} from "./interfaces/IUniswapV3MintCallback.sol";
-import { IUniswapV3SwapCallback } from "./interfaces/IUniswapV3SwapCallback.sol";
-import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {IUniswapV3SwapCallback} from "./interfaces/IUniswapV3SwapCallback.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /*
  * @author Parsa Amini
@@ -20,6 +24,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     using SafeCast for int256;
     using Tick for mapping(int24 => Tick.Info);
     using Position for mapping(bytes32 => Position.Info);
+    using TickBitmap for mapping(int16 word => uint256 value);
     using Position for Position.Info;
 
     error UniswapV3SimulatorPool__InsufficientInputAmount();
@@ -40,7 +45,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         int256 indexed amount0,
         int256 indexed amount1,
         uint160 sqrtPriceX96,
-        uint128 liquidity,
+        uint256 liquidity,
         int24 tick
     );
 
@@ -57,12 +62,29 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         bool unlocked;
     }
 
+    struct SwapState {
+        uint256 amountSpecifiedRemaining;
+        uint256 amountCalculated;
+        uint160 sqrtPriceX96;
+        int24 tick;
+    }
+
+    struct stepState {
+        uint160 sqrtPriceStartX96;
+        uint160 sqrtPriceNextX96;
+        int24 nextTick;
+        uint256 amountIn;
+        uint256 amountOut;
+    }
+
     Slot0 public slot0;
 
-    uint128 public liquidity;
+    // @audit should be uint128 BTW
+    uint256 public liquidity;
 
-    mapping(int24 tick => Tick.Info) public ticks;
-    mapping(bytes32 => Position.Info) public positions;
+    mapping(int24 tick => Tick.Info) private ticks;
+    mapping(bytes32 => Position.Info) private positions;
+    mapping(int16 => uint256) private tickBitmap;
 
     modifier lock() {
         require(slot0.unlocked, "UniswapV3SimulatorPool__ContractIsLocked");
@@ -131,40 +153,59 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     /*
      * @param _to is the address that we will send the amountOut of asked token.
      * @param direction is the dicrection that sepcify sell or buying tokenX, it helps us to calculate ticks.
+        direction is the flag that controls swap direction:
+        when true, token0 is traded in for token1; (SELLING ETH)
+        when false, it’s the opposite. (BUYING ETH)
+        For example, if token0 is ETH and token1 is USDC, setting zeroForOne to true means buying USDC for ETH. 
      * @param _amount is the amount to buy or sell based on the direction.
      * @param sqrtPriceLimitX96 is bounderies related to new price that we will estimate it during this function.
      * @param _data is the bytes data to pass into the transaction.
      * @return amountIn is the amount of tokenX.
      * @return amountOut is the maount of tokenY that you will receive based on the estimated next price.
     */
-    function swap(address _to, bool direction, int256 _amount, uint160 sqrtPriceLimitX96, bytes calldata _data)
+    function swap(address _to, bool direction, uint256 _amount, /* uint160 sqrtPriceLimitX96, */ bytes calldata _data)
+        external
         nonReentrant
         lock
-        external
-        returns(int256 amountIn, int256 amountOut)
+        returns (int256 amountIn, int256 amountOut)
     {
         // we should estimate the target price based on the amountIn
-
-        ////////// This part hard-coded and will be removed. //////////
-        int24 nextTick = 85184;
-        uint160 nextSqrtPriceX96 = 5604469350942327889444743441197;
-
-        amountIn = -0.008396714242162444 ether;
-        amountOut = 42 ether;
-        ///////////////////////////////////////////////////////////////
         // gas optimization
         Slot0 memory slot = slot0;
 
-        (slot0.tick, slot0.sqrtPriceX96) = (nextTick, nextSqrtPriceX96);
+        SwapState memory state = SwapState({
+            amountSpecifiedRemaining: _amount,
+            amountCalculated: 0,
+            sqrtPriceX96: slot.sqrtPriceX96,
+            tick: slot.tick
+        });
+
+        stepState memory step;
+        while (state.amountSpecifiedRemaining > 0) {
+            step.sqrtPriceStartX96 = state.sqrtPriceX96;
+
+            (step.nextTick,) = tickBitmap.nextInitializedTickViaWord(state.tick, 1, direction);
+            // The sqrtPriceNext in here is not the actual/possible amount, is based on the user's arbitary amount. we wull calculate the possible amount later.
+            step.sqrtPriceNextX96 = TickMath.getSqrtRatioAtTick(step.nextTick);
+
+            // Now we have new sqrtPrice and new tick, let's calculate the amountIn and amountOut using these results.
+            // step.amountIn is the number of tokens the price range can buy from the user
+            // step.amountOut  is the related number of the other token the pool can sell to the user
+            (state.sqrtPriceX96, step.amountIn, step.amountOut) =
+                SwapMath.computeSwapStep(step.sqrtPriceStartX96, step.sqrtPriceNextX96, liquidity, _amount);
+
+            state.amountSpecifiedRemaining -= step.amountIn;
+            state.amountCalculated += step.amountOut;
+            state.tick = TickMath.getTickAtSqrtRatio(state.sqrtPriceX96);
+        }
+
+        (slot0.tick, slot0.sqrtPriceX96) = (step.nextTick, step.sqrtPriceNextX96);
 
         uint256 balance1Before = balance1();
-        IUniswapV3SwapCallback(msg.sender).uniswapV3SwapCallback(
-            amountIn,
-            amountOut,
-            _data
-        );
-        if (balance1Before + uint256(amountOut) < balance1())
+        IUniswapV3SwapCallback(msg.sender).uniswapV3SwapCallback(amountIn, amountOut, _data);
+        if (balance1Before + uint256(amountOut) < balance1()) {
             revert UniswapV3SimulatorPool__InsufficientInputAmount();
+        }
 
         // we should figure out the value of amountOut via the _amountIn and the nextPrice that we estimated.
 
@@ -172,8 +213,6 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
 
         emit Swap(msg.sender, _to, amountIn, amountOut, slot0.sqrtPriceX96, liquidity, slot0.tick);
     }
-
-
 
     function balance0() internal view returns (uint256 balance) {
         balance = token0.balanceOf(address(this));
