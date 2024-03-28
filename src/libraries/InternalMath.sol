@@ -9,6 +9,7 @@ library InternalMath {
     using SafeCast for uint256;
 
     error InternalMath__Overflow();
+    error InternalMath__DivisionByZero();
 
     function getNextSqrtPriceBasedOnInput(
         uint160 _currentSqrtPriceX96,
@@ -35,15 +36,17 @@ library InternalMath {
         pure
         returns(uint160 nextPriceSqrtX96)
     {
-        uint256 liquidity = _liquidity >> FixedPoint96.RESOLUTION;
+        uint256 liquidity = _liquidity << FixedPoint96.RESOLUTION;
 
-        uint256 numenator = tryMul(liquidity, _sqrtPriceX96); //@audit It's slightly Overflow vulnerable | Confident: LOW
-        
-        uint256 product = tryMul(_amount,_sqrtPriceX96);
-
-        uint256 denominator = tryAdd(product, liquidity);
-
-        uint256 nextPriceSqrtX96 = mulDivRoundingUp(_sqrtPriceX96, liquidity, numenator + _liquidity).toUint160();
+        uint256 product = tryMul(_amount, _sqrtPriceX96);
+        // Check for Overflow
+        if (product / _amount == _sqrtPriceX96) {
+            uint256 denominator = tryAdd(product, liquidity);
+            nextPriceSqrtX96 = mulDivRoundingUp(_sqrtPriceX96, liquidity, denominator).toUint160();
+        } else {            
+            // If overflow happened this equation will be used but less accurate and precise. 
+            nextPriceSqrtX96 = divRoundingUp(liquidity, _amount + tryDiv(liquidity, _sqrtPriceX96)).toUint160();
+        }
     }   
 
     function getNextPriceSqrtX96OnAmount1RoundingUp(uint160 _sqrtPriceX96, uint256 _liquidity, uint256 _amount)
@@ -51,24 +54,67 @@ library InternalMath {
         pure
         returns(uint160 nextPriceSqrtX96)
     {
-        // Next implementation...
+        uint256 amount = _amount << FixedPoint96.RESOLUTION;
+        uint160 delta_sqrt = tryDiv(amount, _liquidity).toUint160();
+        nextPriceSqrtX96 = tryAdd(_sqrtPriceX96, delta_sqrt).toUint160();
     }
 
-    function calculateDeltaToken0(uint160 _currentSqrtPriceX96, uint160 _nextSqrtPriceX96, uint256 _liquidity)
-        internal
-        pure
-        returns (uint256 result_amount)
-    {
 
+    ///////////////////////////////////
+    ///   Calculation Mathematical  ///
+    ///////////////////////////////////
+    function calculateDeltaToken0(
+        uint160 sqrtPriceAX96,
+        uint160 sqrtPriceBX96,
+        uint256 liquidity
+    ) internal pure returns (uint256 amount0) {
+        // amount0 = liquidity < 0
+        //     ? -int256(
+        //         calcAmount0Delta(
+        //             sqrtPriceAX96,
+        //             sqrtPriceBX96,
+        //             uint128(-liquidity),
+        //             false
+        //         )
+        //     )
+        //     : int256(
+        //         calcAmount0Delta(
+        //             sqrtPriceAX96,
+        //             sqrtPriceBX96,
+        //             uint128(liquidity),
+        //             true
+        //         )
+        //     );
+        amount0 = 0;
     }
 
-    function calculateDeltaToken1(uint160 _currentSqrtPriceX96, uint160 _nextSqrtPriceX96, uint256 _liquidity)
-        internal
-        pure
-        returns (uint256 result_amount)
-    {
-
+    /// @notice Calculates amount1 delta between two prices
+    function calculateDeltaToken1(
+        uint160 sqrtPriceAX96,
+        uint160 sqrtPriceBX96,
+        uint256 liquidity
+    ) internal pure returns (uint256 amount1) {
+        // amount1 = liquidity < 0
+        //     ? -int256(
+        //         calcAmount1Delta(
+        //             sqrtPriceAX96,
+        //             sqrtPriceBX96,
+        //             uint128(-liquidity),
+        //             false
+        //         )
+        //     )
+        //     : int256(
+        //         calcAmount1Delta(
+        //             sqrtPriceAX96,
+        //             sqrtPriceBX96,
+        //             uint128(liquidity),
+        //             true
+        //         )
+        //     );
+        amount1 = 0;
     }
+
+
 
     function mulDivRoundingUp(
         uint256 a,
@@ -112,6 +158,16 @@ library InternalMath {
             uint256 c = a * b;
             if (c / a != b) revert InternalMath__Overflow();
             return c;
+        }
+    }
+
+    /**
+     * @dev Returns the division of two unsigned integers, with a success flag (no division by zero).
+    */
+     function tryDiv(uint256 a, uint256 b) internal pure returns (uint256 result) {
+        unchecked {
+            if (b == 0) revert InternalMath__DivisionByZero();
+            return a / b;
         }
     }
 

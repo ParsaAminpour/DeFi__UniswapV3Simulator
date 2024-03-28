@@ -2,8 +2,11 @@
 pragma solidity 0.8.20;
  
 import { InternalMath } from "./InternalMath.sol";
+import { SafeCast } from "./SafeCast.sol";
 
 library SwapMath {
+    using SafeCast for uint256;
+
     function computeSwapStep(
         uint160 _sqrtPriceCurrentX96,
         uint160 _sqrtPriceTargetX96,
