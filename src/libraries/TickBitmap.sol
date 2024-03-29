@@ -31,6 +31,8 @@ library TickBitmap {
      * @param tick is the current tick.
      * @param tickSpacing is always 1 until we start using it in Milestone 4.
      * @param lte is the flag that sets the direction. When true, we’re selling token x and searching for the next initialized tick to the right of the current one. When false, it’s the other way around. lte equals the swap direction: true when selling token x, false otherwise.
+     * @returns nextTick which is the next tick contains liquidity.
+     * @returns initialized Knowing if the next tick is initialized or not will help us save some gas in situations when there’s no initialized tick in the current word in the ticks bitmap.
     */
     function nextInitializedTickViaWord(
         mapping(int16 => uint256) storage self,

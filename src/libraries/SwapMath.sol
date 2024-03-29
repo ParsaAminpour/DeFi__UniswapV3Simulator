@@ -15,9 +15,21 @@ library SwapMath {
     ) internal pure returns (uint160 nextCalculatedSqrtPriceX96, uint256 amountIn, uint256 amountOut) {
         bool direction = _sqrtPriceCurrentX96 > _sqrtPriceTargetX96; // means that we want to sell TokenX
 
-        nextCalculatedSqrtPriceX96 = InternalMath.getNextSqrtPriceBasedOnInput(
-            _sqrtPriceCurrentX96, _liquidity, _amountRemaining, direction);
+        amountIn = direction
+            ? InternalMath.calculateDeltaToken0(
+                _sqrtPriceCurrentX96, _sqrtPriceTargetX96, _liquidity
+            )
+            : InternalMath.calculateDeltaToken1(
+                _sqrtPriceCurrentX96, _sqrtPriceTargetX96, _liquidity
+            );
         
+        /// If it’s smaller than amountRemaining, we say that the current price range cannot fulfill the whole swap
+        nextCalculatedSqrtPriceX96 = (_amountRemaining >= amountIn)
+            ? _sqrtPriceTargetX96
+            : nextCalculatedSqrtPriceX96 = InternalMath.getNextSqrtPriceBasedOnInput(
+                _sqrtPriceCurrentX96, _liquidity, _amountRemaining, direction);
+        
+                
         amountIn = InternalMath.calculateDeltaToken0(
             _sqrtPriceCurrentX96, nextCalculatedSqrtPriceX96, _liquidity);
 

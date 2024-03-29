@@ -10,6 +10,7 @@ library InternalMath {
 
     error InternalMath__Overflow();
     error InternalMath__DivisionByZero();
+    error InternalMath__bIsGreaterThanA();
 
     function getNextSqrtPriceBasedOnInput(
         uint160 _currentSqrtPriceX96,
@@ -171,4 +172,13 @@ library InternalMath {
         }
     }
 
+    /**
+     * @dev Returns the subtraction of two unsigned integers, with an success flag (no overflow).
+    */
+     function trySub(uint256 a, uint256 b) internal pure returns (uint256 result) {
+        unchecked {
+            if (b > a) revert InternalMath__bIsGreaterThanA();
+            return a - b;
+        }
+    }
 }
