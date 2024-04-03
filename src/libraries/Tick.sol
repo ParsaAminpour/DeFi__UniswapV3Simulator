@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { InternalMath } from "./InternalMath.sol";
-import { SafeCast } from "./SafeCast.sol";
+import {InternalMath} from "./InternalMath.sol";
+import {SafeCast} from "./SafeCast.sol";
 
 library Tick {
     using InternalMath for uint256;
@@ -16,12 +16,10 @@ library Tick {
         int128 liquidityNet;
     }
 
-    function update(
-        mapping(int24 => Tick.Info) storage self,
-        int24 _tickId,
-        int128 _newLiquidity,
-        bool upper
-    ) internal returns(bool flipped) {
+    function update(mapping(int24 => Tick.Info) storage self, int24 _tickId, int128 _newLiquidity, bool upper)
+        internal
+        returns (bool flipped)
+    {
         Tick.Info storage info = self[_tickId];
         if (info.liquidityGross == 0) {
             // Other significant implementation
@@ -29,15 +27,14 @@ library Tick {
         }
 
         // when the lower (upper) tick is crossed left to right (right to left), liquidity must be added (removed)
-        info.liquidityNet = upper
-            ? (info.liquidityNet) - (_newLiquidity)
-            : (info.liquidityNet) + (_newLiquidity);
+        info.liquidityNet = upper ? (info.liquidityNet) - (_newLiquidity) : (info.liquidityNet) + (_newLiquidity);
     }
 
     function cross(mapping(int24 => Tick.Info) storage self, int24 tick)
         internal
         view
-        returns (int128 liquidityDelta) {
+        returns (int128 liquidityDelta)
+    {
         Tick.Info storage info = self[tick];
         liquidityDelta = info.liquidityNet;
     }

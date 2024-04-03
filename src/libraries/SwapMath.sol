@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
- 
-import { InternalMath } from "./InternalMath.sol";
-import { SafeCast } from "./SafeCast.sol";
+
+import {InternalMath} from "./InternalMath.sol";
+import {SafeCast} from "./SafeCast.sol";
 
 library SwapMath {
     using SafeCast for uint256;
@@ -16,26 +16,19 @@ library SwapMath {
         bool direction = _sqrtPriceCurrentX96 > _sqrtPriceTargetX96; // means that we want to sell TokenX
 
         amountIn = direction
-            ? InternalMath.calculateDeltaToken0(
-                _sqrtPriceCurrentX96, _sqrtPriceTargetX96, _liquidity
-            )
-            : InternalMath.calculateDeltaToken1(
-                _sqrtPriceCurrentX96, _sqrtPriceTargetX96, _liquidity
-            );
-        
+            ? InternalMath.calculateDeltaToken0(_sqrtPriceCurrentX96, _sqrtPriceTargetX96, _liquidity)
+            : InternalMath.calculateDeltaToken1(_sqrtPriceCurrentX96, _sqrtPriceTargetX96, _liquidity);
+
         /// If it’s smaller than amountRemaining, we say that the current price range cannot fulfill the whole swap
         nextCalculatedSqrtPriceX96 = (_amountRemaining >= amountIn)
             ? _sqrtPriceTargetX96
-            : nextCalculatedSqrtPriceX96 = InternalMath.getNextSqrtPriceBasedOnInput(
-                _sqrtPriceCurrentX96, _liquidity, _amountRemaining, direction);
-        
-                
-        amountIn = InternalMath.calculateDeltaToken0(
-            _sqrtPriceCurrentX96, nextCalculatedSqrtPriceX96, _liquidity);
+            : nextCalculatedSqrtPriceX96 =
+                InternalMath.getNextSqrtPriceBasedOnInput(_sqrtPriceCurrentX96, _liquidity, _amountRemaining, direction);
 
-        amountOut = InternalMath.calculateDeltaToken1(
-            _sqrtPriceCurrentX96, nextCalculatedSqrtPriceX96, _liquidity);
-        
+        amountIn = InternalMath.calculateDeltaToken0(_sqrtPriceCurrentX96, nextCalculatedSqrtPriceX96, _liquidity);
+
+        amountOut = InternalMath.calculateDeltaToken1(_sqrtPriceCurrentX96, nextCalculatedSqrtPriceX96, _liquidity);
+
         // If the swap was declares as BUY position (FOR ETH FOR EXAMPLE)
         if (!direction) (amountIn, amountOut) = (amountOut, amountIn);
     }

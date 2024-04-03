@@ -9,16 +9,16 @@ import {SafeCast} from "./libraries/SafeCast.sol";
 import {TickBitmap} from "./libraries/TickBitmap.sol";
 import {TickMath} from "./libraries/TickMath.sol";
 import {SwapMath} from "./libraries/SwapMath.sol";
-import { InternalMath } from "./libraries/InternalMath.sol";
-import { LiquidityMath } from "./libraries/LiquidityMath.sol";
+import {InternalMath} from "./libraries/InternalMath.sol";
+import {LiquidityMath} from "./libraries/LiquidityMath.sol";
 import {IUniswapV3MintCallback} from "./interfaces/IUniswapV3MintCallback.sol";
 import {IUniswapV3SwapCallback} from "./interfaces/IUniswapV3SwapCallback.sol";
-import { IUniswapV3FlashCallback } from "./interfaces/IUniswapV3FlashCallback.sol";
-import { IUniswapV3PoolDeployer } from "./interfaces/IUniswapV3PoolDeployer.sol";
+import {IUniswapV3FlashCallback} from "./interfaces/IUniswapV3FlashCallback.sol";
+import {IUniswapV3PoolDeployer} from "./interfaces/IUniswapV3PoolDeployer.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /*
- * @author Parsa Amini
+ * @author Parsa Amini (parsa.aminpour@gmail.com)
  * @notice this contract is loosely based on the UniswapV3 Pool implementation as it expected.
 */
 contract UniswapV3SimulatorPool is ReentrancyGuard {
@@ -52,13 +52,9 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         uint256 liquidity,
         int24 tick
     );
-    event Flash(
-        uint256 indexed amount0,
-        uint256 indexed amount1,
-        address owner
-        // uint256 fee0,
-        // uint256 fee1,
-    );
+    event Flash(uint256 indexed amount0, uint256 indexed amount1, address owner);
+    // uint256 fee0,
+    // uint256 fee1,
 
     ////// HARD-CODED AND WILL BE REMOVED ////// @audit
     int24 public constant MIN_TICK = -887272;
@@ -215,18 +211,14 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
             // step.amountIn is the number of tokens the price range can buy from the user
             // step.amountOut  is the related number of the other token the pool can sell to the user
             // state.sqrtPriceX96 is the new current price, i.e. the price that will be set after the current swap
-            (state.sqrtPriceX96, step.amountIn, step.amountOut) =
-                SwapMath.computeSwapStep(
-                    step.sqrtPriceStartX96,
-                    (direction
-                        ? step.sqrtPriceNextX96 < sqrtPriceLimitX96
-                        : step.sqrtPriceNextX96 > sqrtPriceLimitX96
-                    )
-                        ? sqrtPriceLimitX96
-                        : step.sqrtPriceNextX96,
-                    liquidity,
-                    _amount
-                );
+            (state.sqrtPriceX96, step.amountIn, step.amountOut) = SwapMath.computeSwapStep(
+                step.sqrtPriceStartX96,
+                (direction ? step.sqrtPriceNextX96 < sqrtPriceLimitX96 : step.sqrtPriceNextX96 > sqrtPriceLimitX96)
+                    ? sqrtPriceLimitX96
+                    : step.sqrtPriceNextX96,
+                liquidity,
+                _amount
+            );
 
             state.amountSpecifiedRemaining -= step.amountIn;
             state.amountCalculated += step.amountOut;
@@ -238,31 +230,33 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         }
 
         (amountIn, amountOut) = direction
-            ? ((_amount - state.amountSpecifiedRemaining).toInt256(),
-                -((state.amountCalculated).toInt256()))
-            : (-(state.amountCalculated).toInt256(),
-                (_amount - state.amountSpecifiedRemaining).toInt256());
+            ? ((_amount - state.amountSpecifiedRemaining).toInt256(), -((state.amountCalculated).toInt256()))
+            : (-(state.amountCalculated).toInt256(), (_amount - state.amountSpecifiedRemaining).toInt256());
 
-        
-        if (direction) { // SELLING TOKEN0 TO THE POOL AND GET CORRESPOND TOKEN (TOKEN1)
+        if (direction) {
+            // SELLING TOKEN0 TO THE POOL AND GET CORRESPOND TOKEN (TOKEN1)
             IERC20(token1).safeTransfer(_to, uint256(-amountOut));
 
             uint256 balance0Before = balance0();
             IUniswapV3SwapCallback(msg.sender).uniswapV3SwapCallback(amountIn, -amountOut, _data);
 
-            if (balance0Before + uint256(amountIn) > balance0()) revert UniswapV3SimulatorPool__InsufficientInputAmount();
-        } else { // VICE VERSA
+            if (balance0Before + uint256(amountIn) > balance0()) {
+                revert UniswapV3SimulatorPool__InsufficientInputAmount();
+            }
+        } else {
+            // VICE VERSA
             IERC20(token0).safeTransfer(_to, uint256(-amountIn));
 
             uint256 balance1Before = balance1();
             IUniswapV3SwapCallback(msg.sender).uniswapV3SwapCallback(-amountIn, amountOut, _data);
 
-            if (balance1Before + uint256(amountOut) > balance1()) revert UniswapV3SimulatorPool__InsufficientInputAmount();
+            if (balance1Before + uint256(amountOut) > balance1()) {
+                revert UniswapV3SimulatorPool__InsufficientInputAmount();
+            }
         }
 
         emit Swap(msg.sender, _to, amountIn, amountOut, slot0.sqrtPriceX96, liquidity, slot0.tick);
     }
-
 
     /*
      * @notice it is possible to borrow tokens during a swap, but you had to return them or an equal amount of the other pool token, in the same transaction.
@@ -272,25 +266,28 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
      * @param _fee1 The fee amount in token1 due to the pool by the end of the flash
      * @param _data Any data passed through by the caller via the IUniswapV3PoolActions#flash call
     */
-    function flash(uint256 _amount0, uint256 _amount1, /*uint256 _fee0*/ /*uint256 _fee1*/ bytes memory _data) external {
+    function flash(uint256 _amount0, uint256 _amount1, /*uint256 _fee0*/ /*uint256 _fee1*/ bytes memory _data)
+        external
+    {
         require(_amount0 == 0 && _amount1 == 0, "UniswapV3SimulatorPool__InvalidAmounts");
-        
+
         uint256 balance_before_flash0 = IERC20(token0).balanceOf(address(this));
         uint256 balance_before_flash1 = IERC20(token1).balanceOf(address(this));
 
-        if(_amount0 > 0) IERC20(token0).safeTransfer(msg.sender, _amount0);
-        if(_amount1 > 0) IERC20(token1).safeTransfer(msg.sender, _amount1);
+        if (_amount0 > 0) IERC20(token0).safeTransfer(msg.sender, _amount0);
+        if (_amount1 > 0) IERC20(token1).safeTransfer(msg.sender, _amount1);
         // tmp fee0 and fee1 amount.
         IUniswapV3FlashCallback(msg.sender).uniswapV3FlashCallback(0, 0, _data);
 
-        if(balance_before_flash0 > IERC20(token0).balanceOf(address(this)))
+        if (balance_before_flash0 > IERC20(token0).balanceOf(address(this))) {
             revert UniswapV3SimulatorPool__FlashRevertedUnpaid();
-        if(balance_before_flash1 > IERC20(token1).balanceOf(address(this)))
+        }
+        if (balance_before_flash1 > IERC20(token1).balanceOf(address(this))) {
             revert UniswapV3SimulatorPool__FlashRevertedUnpaid();
-        
+        }
+
         emit Flash(_amount0, _amount1, msg.sender);
     }
-
 
     ////////////////////////////////////////
     ////    Internal  View Functions   /////
