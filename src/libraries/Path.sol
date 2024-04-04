@@ -42,7 +42,7 @@ library Path {
     function getFirstPoolPair(bytes memory path) internal pure returns(bytes memory first_pair) {
         first_pair = path.slice(START_INDEX, FULL_TOKEN_PAIR);
     }
-
+    
     function skipToken(bytes memory path) internal pure returns(bytes memory skip) {
         skip = path.slice(SINGLE_TOKEN_OFFSET, path.length - SINGLE_TOKEN_OFFSET);
     }
