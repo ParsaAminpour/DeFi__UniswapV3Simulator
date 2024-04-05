@@ -1,0 +1,8 @@
+{
+    "importFilesToOrigRelpaths": {},
+    "primary_contract": "harnessWrapperCodeBase",
+    "specfile": "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora/spec/bitMathFVC.spec",
+    "specfileOrigRelpath": "test/certora/spec/bitMathFVC.spec",
+    "specfilesToImportDecls": {},
+    "type": "spec"
+}

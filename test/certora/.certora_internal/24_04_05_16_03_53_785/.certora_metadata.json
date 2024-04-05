@@ -1,0 +1,24 @@
+{
+    "CLI_version": "7.0.7",
+    "branch": "test-libs",
+    "conf": {
+        "files": [
+            "./harness/harnessWrapperCodeBase.sol"
+        ],
+        "msg": "Verification of BitMath mostSignigicantBit functionality",
+        "optimistic_loop": true,
+        "process": "emv",
+        "rule_sanity": "basic",
+        "verify": "harnessWrapperCodeBase:./spec/bitMathFVC.spec",
+        "wait_for_results": "all"
+    },
+    "cwd_relative": "test/fvc/certora",
+    "dirty": true,
+    "origin": "https://github.com/ParsaAminpour/DeFi__UniswapV3Simulator.git",
+    "raw_args": [
+        "/home/jonathan/.local/bin/certoraRun",
+        "./bitMathFVC.conf"
+    ],
+    "revision": "3bee762c19b1fbc90b377aa5754fc016db0f2234",
+    "timestamp": "1712307833.596613"
+}

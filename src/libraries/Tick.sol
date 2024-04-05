@@ -25,7 +25,6 @@ library Tick {
             // Other significant implementation
             info.initialized = true;
         }
-
         // when the lower (upper) tick is crossed left to right (right to left), liquidity must be added (removed)
         info.liquidityNet = upper ? (info.liquidityNet) - (_newLiquidity) : (info.liquidityNet) + (_newLiquidity);
     }
