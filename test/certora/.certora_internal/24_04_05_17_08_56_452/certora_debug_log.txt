@@ -1,0 +1,16 @@
+Saving last configuration file to .certora_internal/24_04_05_17_08_56_452/run.conf
+There is no TAC file. Going to script EVMVerifier/certoraBuild.py to main_with_args()
+Creating dir /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora/.certora_internal/24_04_05_17_08_56_452/.certora_config
+In /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora/spec/bitMathFVC.spec, found the imports: []
+copying spec file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora/spec/bitMathFVC.spec to /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora/.certora_internal/24_04_05_17_08_56_452/.certora_sources/.0_bitMathFVC.spec.spec
+writing /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora/.certora_internal/24_04_05_17_08_56_452/.certora_verify.json
+Path to typechecker is /home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar
+running ['java', '-jar', '/home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar', '-buildDirectory', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora/.certora_internal/24_04_05_17_08_56_452']
+
+building file harness/harnessWrapperCodeBase.sol
+Running cmd solc -o ".certora_internal/24_04_05_17_08_56_452/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora",. --standard-json
+stdout, stderr = .certora_internal/24_04_05_17_08_56_452/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stdout, .certora_internal/24_04_05_17_08_56_452/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stderr
+build failed
+Failure traceback: 
+Exception: Failed to run solc -o ".certora_internal/24_04_05_17_08_56_452/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora",. --standard-json, exit code 245
+Encountered an error running Certora Prover, please contact Certora; consider running the script again with --debug to find out why it failed

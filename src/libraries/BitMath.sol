@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.20;
+pragma solidity 0.8.20;
 
 library BitMath {
     /// @notice Returns the index of the most significant bit of the number,

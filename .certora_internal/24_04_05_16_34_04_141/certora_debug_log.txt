@@ -1,0 +1,29 @@
+Saving last configuration file to .certora_internal/24_04_05_16_34_04_141/run.conf
+There is no TAC file. Going to script EVMVerifier/certoraBuild.py to main_with_args()
+Creating dir /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_04_05_16_34_04_141/.certora_config
+In /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora/spec/bitMathFVC.spec, found the imports: []
+copying spec file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/test/certora/spec/bitMathFVC.spec to /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_04_05_16_34_04_141/.certora_sources/.0_bitMathFVC.spec.spec
+writing /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_04_05_16_34_04_141/.certora_verify.json
+Path to typechecker is /home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar
+running ['java', '-jar', '/home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar', '-buildDirectory', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_04_05_16_34_04_141']
+
+building file test/certora/harness/harnessWrapperCodeBase.sol
+Running cmd solc -o ".certora_internal/24_04_05_16_34_04_141/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator",.,"lib/forge-std/src" --standard-json
+stdout, stderr = .certora_internal/24_04_05_16_34_04_141/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stdout, .certora_internal/24_04_05_16_34_04_141/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stderr
+build failed
+Failure traceback: 
+Traceback (most recent call last):
+  File "/home/jonathan/.local/lib/python3.10/site-packages/certora_cli/certoraRun.py", line 140, in run_certora
+    build(context, ignore_spec_syntax_check=is_library)
+  File "/home/jonathan/.local/lib/python3.10/site-packages/certora_cli/EVMVerifier/certoraBuild.py", line 3701, in build
+    raise e
+  File "/home/jonathan/.local/lib/python3.10/site-packages/certora_cli/EVMVerifier/certoraBuild.py", line 3674, in build
+    certora_build_generator.build()
+  File "/home/jonathan/.local/lib/python3.10/site-packages/certora_cli/EVMVerifier/certoraBuild.py", line 2625, in build
+    sdc_pre_finders = self.collect_for_file(build_arg_contract_file, i, compiler_lang, Path(os.getcwd()))
+  File "/home/jonathan/.local/lib/python3.10/site-packages/certora_cli/EVMVerifier/certoraBuild.py", line 1890, in collect_for_file
+    Util.run_compiler_cmd(collect_cmd, f"{sdc_name}.standard.json", wd=compile_wd,
+  File "/home/jonathan/.local/lib/python3.10/site-packages/certora_cli/Shared/certoraUtils.py", line 1065, in run_compiler_cmd
+    raise Exception(msg)
+Exception: Failed to run solc -o ".certora_internal/24_04_05_16_34_04_141/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator",.,"lib/forge-std/src" --standard-json, exit code 245
+Encountered an error running Certora Prover, please contact Certora
