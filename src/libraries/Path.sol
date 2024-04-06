@@ -30,11 +30,11 @@ library Path {
     // e.g. TokenX 60 TokenY 10 TokenZ
     uint256 public constant MULTI_POOL_MIN_LENGTH = FULL_TOKEN_PAIR + SINGLE_TOKEN_OFFSET;
 
-    function numPools(bytes calldata path) internal pure returns(uint256 num) {
+    function numPools(bytes memory path) internal pure returns(uint256 num) {
         num = (path.length - ADDRESS_LENGTH) / SINGLE_TOKEN_OFFSET;
     }
 
-    function hasMultiplePool(bytes calldata path) internal pure returns(bool has) {
+    function hasMultiplePool(bytes memory path) internal pure returns(bool has) {
         has = path.length >= MULTI_POOL_MIN_LENGTH;
     }
 
@@ -44,6 +44,7 @@ library Path {
     }
     
     function skipToken(bytes memory path) internal pure returns(bytes memory skip) {
+        require(hasMultiplePool(path), "Path__thisPathHasNotMultiplePool");
         skip = path.slice(SINGLE_TOKEN_OFFSET, path.length - SINGLE_TOKEN_OFFSET);
     }
 

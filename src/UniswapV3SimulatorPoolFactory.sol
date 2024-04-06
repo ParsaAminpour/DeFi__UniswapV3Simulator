@@ -21,7 +21,9 @@ contract UniswapV3SimulatorPoolFactory is IUniswapV3PoolDeployer {
     mapping(uint24 tickSpacing => bool allowed) private tickSpaceAllowed;
     mapping(address token0 => mapping(address token1 => mapping(uint24 tickSpace => address pool))) private pools;
 
-    constructor() {
+    constructor(uint24 _tickSpace) {
+        tickSpaceAllowed[_tickSpace] = true;
+        // Experimental vales.
         tickSpaceAllowed[10] = true;
         tickSpaceAllowed[60] = true;
     }
@@ -43,7 +45,7 @@ contract UniswapV3SimulatorPoolFactory is IUniswapV3PoolDeployer {
             fee: 0 // @audit should be defined
         });
 
-        pool = address(new UniswapV3SimulatorPool{salt: keccak256(abi.encodePacked(_token0, _token1, _tickSpacing))}());
+        pool = address(new UniswapV3SimulatorPool{salt: keccak256(abi.encode(_token0, _token1, _tickSpacing))}());
 
         delete params;
 
