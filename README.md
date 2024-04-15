@@ -1,1 +1,1 @@
-# THIS PROJECT IS UNDER THE CREATION
+# This repo is a work in progress, and contracts have not been audited.
