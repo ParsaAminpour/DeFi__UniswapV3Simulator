@@ -11,6 +11,7 @@ import {TickMath} from "./libraries/TickMath.sol";
 import {SwapMath} from "./libraries/SwapMath.sol";
 import {InternalMath} from "./libraries/InternalMath.sol";
 import {LiquidityMath} from "./libraries/LiquidityMath.sol";
+import {FixedPoint96, FixedPoint128} from "./libraries/FixedPoints.sol";
 import {IUniswapV3MintCallback} from "./interfaces/IUniswapV3MintCallback.sol";
 import {IUniswapV3SwapCallback} from "./interfaces/IUniswapV3SwapCallback.sol";
 import {IUniswapV3FlashCallback} from "./interfaces/IUniswapV3FlashCallback.sol";
@@ -73,6 +74,8 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         uint256 amountCalculated;
         uint160 sqrtPriceX96;
         int24 tick;
+        uint256 feeGrowthGlobalX128;
+        uint256 liquidity;
     }
 
     struct stepState {
@@ -82,6 +85,14 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         uint256 amountIn;
         uint256 amountOut;
         bool initialized;
+        uint256 feeAmount;
+    }
+
+    struct ModifyPositionParams {
+        address owner;
+        int24 lowerTick;
+        int24 upperTick;
+        int128 liquidityDelta;
     }
 
     Slot0 public slot0;
@@ -91,8 +102,10 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     address public immutable token1;
 
     uint24 public immutable fee;
+    uint256 public feeGrowthGlobal0x128; // tracks fees accumulated in token0.
+    uint256 public feeGrowthGlobal1x128; // tracks fees accumulated in token1.
 
-    int24 public immutable tickSpace;
+    uint24 public immutable tickSpace;
     // uint128 public immutable maxLiquidityPerTick;
 
     // @audit should be uint128 BTW
@@ -110,7 +123,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     }
 
     constructor() {
-        int24 tick_spacing;
+        uint24 tick_spacing;
         // In here the msg.sender is the factory contract indeed.
         (factory, token0, token1, fee, tick_spacing) = IUniswapV3PoolDeployer(msg.sender).parameters();
         tickSpace = tick_spacing;
@@ -191,12 +204,17 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         // we should estimate the target price based on the amountIn
         // gas optimization
         Slot0 memory slot = slot0;
+        uint256 _liq = liquidity;
 
         SwapState memory state = SwapState({
             amountSpecifiedRemaining: _amount,
             amountCalculated: 0,
             sqrtPriceX96: slot.sqrtPriceX96,
-            tick: slot.tick
+            tick: slot.tick,
+            feeGrowthGlobalX128: direction
+                ? feeGrowthGlobal0x128
+                : feeGrowthGlobal1x128,
+            liquidity: _liq
         });
 
         stepState memory step;
@@ -289,6 +307,97 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         emit Flash(_amount0, _amount1, msg.sender);
     }
 
+
+    function _modifyPosition(ModifyPositionParams memory params)
+    internal
+    returns (Position.Info storage position, int256 amount0, int256 amount1) 
+    {
+        // gas optimizations
+        Slot0 memory slot0_ = slot0;
+        uint256 feeGrowthGlobal0X128_ = feeGrowthGlobal0x128;
+        uint256 feeGrowthGlobal1X128_ = feeGrowthGlobal1x128;
+
+        position = positions.get(
+            params.owner,
+            params.lowerTick,
+            params.upperTick
+        );
+
+        bool flippedLower = ticks.update(
+            params.lowerTick,
+            slot0_.tick,
+            int128(params.liquidityDelta),
+            feeGrowthGlobal0X128_,
+            feeGrowthGlobal1X128_,
+            false
+        );
+        bool flippedUpper = ticks.update(
+            params.upperTick,
+            slot0_.tick,
+            int128(params.liquidityDelta),
+            feeGrowthGlobal0X128_,
+            feeGrowthGlobal1X128_,
+            true
+        );
+
+        if (flippedLower) {
+            tickBitmap.flipTick(params.lowerTick, int24(tickSpace));
+        }
+
+        if (flippedUpper) {
+            tickBitmap.flipTick(params.upperTick, int24(tickSpace));
+        }
+
+        (uint256 feeGrowthInside0X128, uint256 feeGrowthInside1X128) = ticks
+            .getFeeGrowthInside(
+                params.lowerTick,
+                params.upperTick,
+                slot0_.tick,
+                feeGrowthGlobal0X128_,
+                feeGrowthGlobal1X128_
+            );
+
+        position.update(
+            params.liquidityDelta,
+            feeGrowthInside0X128,
+            feeGrowthInside1X128
+        );
+
+        if (slot0_.tick < params.lowerTick) {
+            amount0 = InternalMath.calcAmount0Delta(
+                TickMath.getSqrtRatioAtTick(params.lowerTick),
+                TickMath.getSqrtRatioAtTick(params.upperTick),
+                params.liquidityDelta
+            );
+        } else if (slot0_.tick < params.upperTick) {
+            amount0 = InternalMath.calcAmount0Delta(
+                slot0_.sqrtPriceX96,
+                TickMath.getSqrtRatioAtTick(params.upperTick),
+                params.liquidityDelta
+            );
+
+            amount1 = InternalMath.calcAmount1Delta(
+                TickMath.getSqrtRatioAtTick(params.lowerTick),
+                slot0_.sqrtPriceX96,
+                params.liquidityDelta
+            );
+
+            liquidity = LiquidityMath.addLiquidity(
+                liquidity,
+                params.liquidityDelta
+            );
+        } else {
+            amount1 = InternalMath.calcAmount1Delta(
+                TickMath.getSqrtRatioAtTick(params.lowerTick),
+                TickMath.getSqrtRatioAtTick(params.upperTick),
+                params.liquidityDelta
+            );
+        }
+    }
+
+    
+
+
     ////////////////////////////////////////
     ////    Internal  View Functions   /////
     ////////////////////////////////////////
@@ -299,4 +408,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     function balance1() internal view returns (uint256 balance) {
         balance = IERC20(token1).balanceOf(address(this));
     }
+
+
+
 }

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { console } from "forge-std/console.sol";
-import { Test } from "forge-std/Test.sol";
-import { Path } from "../../src/libraries/Path.sol";    
+import {console} from "forge-std/console.sol";
+import {Test} from "forge-std/Test.sol";
+import {Path} from "../../src/libraries/Path.sol";
 
 contract pathTest is Test {
     address public weth;
@@ -24,19 +24,18 @@ contract pathTest is Test {
         usdc = makeAddr("usdc");
         wbtc = makeAddr("wbtc");
 
-        singlePool = bytes.concat(
-            bytes20(weth), bytes3(tickSpace1), bytes20(usdt)
-        );
+        singlePool = bytes.concat(bytes20(weth), bytes3(tickSpace1), bytes20(usdt));
 
-        twoPools = bytes.concat(
-            bytes20(weth), bytes3(tickSpace1), bytes20(usdt),
-            bytes3(tickSpace2), bytes20(wbtc)
-        );
+        twoPools = bytes.concat(bytes20(weth), bytes3(tickSpace1), bytes20(usdt), bytes3(tickSpace2), bytes20(wbtc));
 
         threePools = bytes.concat(
-            bytes20(weth), bytes3(tickSpace1), bytes20(usdt),
-            bytes3(tickSpace2), bytes20(wbtc),
-            bytes3(tickSpace1), bytes20(usdc)
+            bytes20(weth),
+            bytes3(tickSpace1),
+            bytes20(usdt),
+            bytes3(tickSpace2),
+            bytes20(wbtc),
+            bytes3(tickSpace1),
+            bytes20(usdc)
         );
     }
 
@@ -58,25 +57,20 @@ contract pathTest is Test {
     }
 
     function testGetFirstPoolPair() public {
-        bytes memory firstPoolExpected = bytes.concat(
-            bytes20(weth), bytes3(tickSpace1), bytes20(usdt)
-        );
+        bytes memory firstPoolExpected = bytes.concat(bytes20(weth), bytes3(tickSpace1), bytes20(usdt));
 
         bytes memory result = Path.getFirstPoolPair(twoPools);
         assertEq(firstPoolExpected, result);
     }
 
     function testSkipToken() public {
-        bytes memory three_pools_pair_expected_after_skipping1 = bytes.concat(
-            bytes20(usdt), bytes3(tickSpace2), bytes20(wbtc),
-            bytes3(tickSpace1), bytes20(usdc)
-        );
+        bytes memory three_pools_pair_expected_after_skipping1 =
+            bytes.concat(bytes20(usdt), bytes3(tickSpace2), bytes20(wbtc), bytes3(tickSpace1), bytes20(usdc));
         bytes memory result1 = Path.skipToken(threePools);
         assertEq(three_pools_pair_expected_after_skipping1, result1);
 
-        bytes memory three_pools_pair_expected_after_skipping2 = bytes.concat(
-            bytes20(wbtc), bytes3(tickSpace1), bytes20(usdc)
-        );
+        bytes memory three_pools_pair_expected_after_skipping2 =
+            bytes.concat(bytes20(wbtc), bytes3(tickSpace1), bytes20(usdc));
         bytes memory result2 = Path.skipToken(result1);
         assertEq(three_pools_pair_expected_after_skipping2, result2);
     }
@@ -86,9 +80,7 @@ contract pathTest is Test {
     }
 
     function testDecodeFirstPool() public {
-        (address token0Result, uint24 tickSpaceResult, address token1Result) = Path.decodeFirstPool(
-            threePools
-        );
+        (address token0Result, uint24 tickSpaceResult, address token1Result) = Path.decodeFirstPool(threePools);
         assertEq(token0Result, weth);
         assertEq(tickSpaceResult, tickSpace1);
         assertEq(token1Result, usdt);

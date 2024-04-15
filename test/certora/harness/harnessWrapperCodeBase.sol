@@ -1,8 +1,7 @@
 // SPDXLicense-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { BitMath } from "../../../../src/libraries/BitMath.sol";
-
+import {BitMath} from "../../../../src/libraries/BitMath.sol";
 
 /// @author Parsa Amini
 /// @notice this contract is a wrapper for all internal functions realted to

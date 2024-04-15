@@ -26,8 +26,11 @@ library TickBitmap {
         self[word] ^= mask;
     }
 
-
-    function isInitialized(mapping(int16 word => uint256 value) storage self, int24 tick) internal view returns(bool initialized) {
+    function isInitialized(mapping(int16 word => uint256 value) storage self, int24 tick)
+        internal
+        view
+        returns (bool initialized)
+    {
         (int16 word, uint8 bit) = getPosition(tick);
         uint256 mask = 1 << bit;
         uint256 masked = self[word] & mask;
@@ -56,11 +59,10 @@ library TickBitmap {
         int24 tickSpace,
         bool direction
     ) internal view returns (int24 nextTick, bool initialized) {
-    
         int24 compressed = tick / tickSpace;
         if (tick < 0 && tick % tickSpace != 0) compressed--;
         // bit is related to current initialized bit position.
-    
+
         // When we want to sell token X and searching for the next tick to the right.
         if (direction) {
             (int16 word, uint8 bit) = getPosition(compressed);
@@ -73,7 +75,7 @@ library TickBitmap {
                 ? (compressed - int24(uint24(bit - BitMath.findMostSignificantBit(masked)))) * tickSpace
                 : (compressed - int24(uint24(bit))) * tickSpace;
         } else {
-            (int16 word, uint8 bit) = getPosition(compressed+1);
+            (int16 word, uint8 bit) = getPosition(compressed + 1);
             // When we want to buy token X and searching for the next tick to the left.
             uint256 mask = ~((1 << bit) - 1); // 1111111100000000
             uint256 masked = self[word] & mask;
