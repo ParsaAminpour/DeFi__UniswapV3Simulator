@@ -32,7 +32,7 @@ library Tick {
         Tick.Info storage tickInfo = self[tick];
 
         uint128 liquidityBefore = tickInfo.liquidityGross;
-        uint128 liquidityAfter = LiquidityMath.addDelta(
+        uint128 liquidityAfter = LiquidityMath.addLiquidity(
             liquidityBefore,
             liquidityDelta
         );
@@ -55,7 +55,7 @@ library Tick {
             : int128(int256(tickInfo.liquidityNet) + liquidityDelta);
     }
 
-    // We will calling this function inside the swap function when a tick is crossed.
+    // We will calling this function inside the swap function when a tick is crossed to manipulate fees.
     function cross(
         mapping(int24 => Tick.Info) storage self,
         int24 tick,

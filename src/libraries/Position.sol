@@ -48,7 +48,7 @@ library Position {
             )
         );
 
-        self.liquidity = LiquidityMath.addDelta(
+        self.liquidity = LiquidityMath.addLiquidity(
             self.liquidity,
             liquidityDelta
         );

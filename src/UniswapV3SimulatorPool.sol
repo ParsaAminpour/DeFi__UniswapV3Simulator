@@ -35,6 +35,8 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     error UniswapV3SimulatorPool__InlvalidTokenToSwap();
     error UniswapV3SimulatorPool__InvalidTickRange();
     error UniswapV3SimulatorPool__FlashRevertedUnpaid();
+    error UniswapV3SimulatorPool__InvalidPriceSlippage();
+    error UniswapV3SimulatorPool__InsufficientLiquidity(uint128 liquidity);
 
     event MintSucceed(
         address indexed sender,
@@ -50,7 +52,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         int256 indexed amount0,
         int256 indexed amount1,
         uint160 sqrtPriceX96,
-        uint256 liquidity,
+        uint128 liquidity,
         int24 tick
     );
     event Flash(uint256 indexed amount0, uint256 indexed amount1, address owner);
@@ -68,23 +70,40 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         int24 tick;
         bool unlocked;
     }
-
+    
+    /// @dev swap state maintain the current swap state.
+    /// @dev the top level state of the swap, the results of which are recorded in storage at the end.
     struct SwapState {
+        // tracks the remaining amount of tokens that need to be bought by the pool.
         uint256 amountSpecifiedRemaining;
+        // is the out amount calculated by the contract
         uint256 amountCalculated;
+        // new current price after the swap is done.
         uint160 sqrtPriceX96;
+        // new tick after the swap is done.
         int24 tick;
+        // the global fee amount belongs the input token,
         uint256 feeGrowthGlobalX128;
-        uint256 liquidity;
+        // The current liquidity.
+        uint128 liquidity;
     }
 
+    /// @dev step state maintain the current swap step's state.
+    ///     This structure tracks the state of one iteration of an “order filling”. 
     struct stepState {
+        // tracks the price the iteration begins with.
         uint160 sqrtPriceStartX96;
+        // sqrtPriceNextX96 is the price at the next tick.
         uint160 sqrtPriceNextX96;
+        // the next initialized tick that will provide liquidity for the swap
         int24 nextTick;
+        // The amount that could be provided by liquidity (current iteration).
         uint256 amountIn;
+        // The amount that could be provided by liquidity (current iteration).
         uint256 amountOut;
+        // The next tick is initialized or not.
         bool initialized;
+        // Amount of fee that should be paid.
         uint256 feeAmount;
     }
 
@@ -109,7 +128,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     // uint128 public immutable maxLiquidityPerTick;
 
     // @audit should be uint128 BTW
-    uint256 public liquidity;
+    uint128 public liquidity;
 
     mapping(int24 tick => Tick.Info) private ticks;
     mapping(bytes32 => Position.Info) private positions;
@@ -185,15 +204,16 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
      * @param _to is the address that we will send the amountOut of asked token.
      * @param direction is the dicrection that sepcify sell or buying tokenX, it helps us to calculate ticks.
         direction is the flag that controls swap direction:
-        when true, token0 is traded in for token1; (SELLING ETH)
-        when false, it’s the opposite. (BUYING ETH)
-        For example, if token0 is ETH and token1 is USDC, setting zeroForOne to true means buying USDC for ETH. 
+        when true, token0 is traded in for token1; (i.e. SELLING ETH)
+        when false, it’s the opposite. (i.e. BUYING ETH)
+        For example, if token0 is ETH and token1 is USDC, setting zeroForOne to true means buying USDC for ETH (selling ETH indeed). 
      * @param _amount is the amount to buy or sell based on the direction.
      * @param sqrtPriceLimitX96 is bounderies related to new price that we will estimate it during this function.
      * @param sqrtPriceLimitY96 is bounderies related to the slippage protection that user define, the default is on 0.1% but because of the volatility this could be an arbitary arg.
      * @param _data is the bytes data to pass into the transaction.
      * @return amountIn is the amount of tokenX.
      * @return amountOut is the maount of tokenY that you will receive based on the estimated next price.
+     * @dev during a swap, fees are collected in either token0 or token1, not both of them!
     */
     function swap(address _to, bool direction, uint256 _amount, uint160 sqrtPriceLimitX96, bytes calldata _data)
         external
@@ -204,7 +224,14 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         // we should estimate the target price based on the amountIn
         // gas optimization
         Slot0 memory slot = slot0;
-        uint256 _liq = liquidity;
+        uint128 _liq = liquidity;
+
+        // slippage bounderies check
+        if(direction
+            ? sqrtPriceLimitX96 > slot.sqrtPriceX96 || sqrtPriceLimitX96 < TickMath.MIN_SQRT_RATIO
+            : sqrtPriceLimitX96 < slot.sqrtPriceX96 || sqrtPriceLimitX96 > TickMath.MAX_SQRT_RATIO
+        ) revert UniswapV3SimulatorPool__InvalidPriceSlippage();
+
 
         SwapState memory state = SwapState({
             amountSpecifiedRemaining: _amount,
@@ -217,35 +244,79 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
             liquidity: _liq
         });
 
-        stepState memory step;
-        while (state.amountSpecifiedRemaining > 0) {
+        // we will loop until the state.amountSpecifiedRemaining become fulfulled.
+        // The state.amountSpecifiedRemaining 0 means that the pool has enough liquidity to provide a swap for _amount.
+        // In the loop, we set up a price range that should provide liquidity for the swap. The range is from state.sqrtPriceX96 to step.sqrtPriceNextX96,
+        //     where the latter is the price at the next initialized tick.
+        while (state.amountSpecifiedRemaining > 0 && state.sqrtPriceX96 != sqrtPriceLimitX96) {
+            stepState memory step;
             step.sqrtPriceStartX96 = state.sqrtPriceX96;
 
-            (step.nextTick, step.initialized) = tickBitmap.nextInitializedTickViaWord(state.tick, 1, direction);
-            // The sqrtPriceNext in here is not the actual/possible amount, is based on the user's arbitary amount. we wull calculate the possible amount later.
+            (step.nextTick, step.initialized) = tickBitmap.nextInitializedTickViaWord(state.tick, int24(tickSpace), direction);
+            // The sqrtPriceNext in here is not the actual/possible amount, is based on the user's arbitary amount. we will calculate the possible amount later.
             step.sqrtPriceNextX96 = TickMath.getSqrtRatioAtTick(step.nextTick);
 
             // Now we have new sqrtPrice and new tick, let's calculate the amountIn and amountOut using these results.
             // step.amountIn is the number of tokens the price range can buy from the user
             // step.amountOut  is the related number of the other token the pool can sell to the user
             // state.sqrtPriceX96 is the new current price, i.e. the price that will be set after the current swap
-            (state.sqrtPriceX96, step.amountIn, step.amountOut) = SwapMath.computeSwapStep(
+            (state.sqrtPriceX96, step.amountIn, step.amountOut, step.feeAmount) = SwapMath.computeSwapStep(
                 step.sqrtPriceStartX96,
                 (direction ? step.sqrtPriceNextX96 < sqrtPriceLimitX96 : step.sqrtPriceNextX96 > sqrtPriceLimitX96)
                     ? sqrtPriceLimitX96
                     : step.sqrtPriceNextX96,
-                liquidity,
-                _amount
+                state.liquidity,
+                state.amountSpecifiedRemaining,
+                // state.feeGrowthGlobalX128
+                fee
             );
 
-            state.amountSpecifiedRemaining -= step.amountIn;
+            state.amountSpecifiedRemaining -= step.amountIn + step.feeAmount;
             state.amountCalculated += step.amountOut;
             state.tick = TickMath.getTickAtSqrtRatio(state.sqrtPriceX96);
+
+            // fee updates
+            if (state.liquidity > 0) {
+                state.feeGrowthGlobalX128 += InternalMath.mulDivision(
+                    step.feeAmount,
+                    FixedPoint128.Q128,
+                    _liq
+                );
+            }
+
+            if (state.sqrtPriceX96 == step.sqrtPriceNextX96) {
+                if (step.initialized) {
+                    int128 liqDelta = ticks.cross(
+                        step.nextTick,
+                        direction ? state.feeGrowthGlobalX128 : feeGrowthGlobal0x128, 
+                        direction ? feeGrowthGlobal1x128 : state.feeGrowthGlobalX128
+                    );
+
+                    if (direction) liqDelta = -liqDelta;
+
+                    state.liquidity = LiquidityMath.addLiquidity(state.liquidity, liqDelta);
+
+                    if (state.liquidity == 0) revert UniswapV3SimulatorPool__InsufficientLiquidity(state.liquidity);
+                }
+
+                state.tick = direction ? step.nextTick - 1 : step.nextTick;
+            } else if (state.sqrtPriceX96 != step.sqrtPriceStartX96) {
+                state.tick = TickMath.getTickAtSqrtRatio(state.sqrtPriceX96);
+            }
         }
 
+        // @audit oracla functionality will change this scope.
         if (slot.tick != state.tick) {
+            // observation functionality.
+
             (slot0.tick, slot0.sqrtPriceX96) = (state.tick, state.sqrtPriceX96);
         }
+        /////////////////////////////////////////////////////////
+
+        if (_liq != state.liquidity) liquidity = state.liquidity;
+
+        if (direction) feeGrowthGlobal0x128 = state.feeGrowthGlobalX128;
+        else feeGrowthGlobal1x128 = state.feeGrowthGlobalX128;
 
         (amountIn, amountOut) = direction
             ? ((_amount - state.amountSpecifiedRemaining).toInt256(), -((state.amountCalculated).toInt256()))
@@ -364,19 +435,19 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         );
 
         if (slot0_.tick < params.lowerTick) {
-            amount0 = InternalMath.calcAmount0Delta(
+            amount0 = InternalMath.calculateDeltaToken0(
                 TickMath.getSqrtRatioAtTick(params.lowerTick),
                 TickMath.getSqrtRatioAtTick(params.upperTick),
                 params.liquidityDelta
             );
         } else if (slot0_.tick < params.upperTick) {
-            amount0 = InternalMath.calcAmount0Delta(
+            amount0 = InternalMath.calculateDeltaToken0(
                 slot0_.sqrtPriceX96,
                 TickMath.getSqrtRatioAtTick(params.upperTick),
                 params.liquidityDelta
             );
 
-            amount1 = InternalMath.calcAmount1Delta(
+            amount1 = InternalMath.calculateDeltaToken1(
                 TickMath.getSqrtRatioAtTick(params.lowerTick),
                 slot0_.sqrtPriceX96,
                 params.liquidityDelta
@@ -387,7 +458,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
                 params.liquidityDelta
             );
         } else {
-            amount1 = InternalMath.calcAmount1Delta(
+            amount1 = InternalMath.calculateDeltaToken1(
                 TickMath.getSqrtRatioAtTick(params.lowerTick),
                 TickMath.getSqrtRatioAtTick(params.upperTick),
                 params.liquidityDelta

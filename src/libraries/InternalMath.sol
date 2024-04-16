@@ -13,6 +13,11 @@ library InternalMath {
     error InternalMath__bIsGreaterThanA();
     error InternalMath__MulDivOverflow(uint256 x, uint256 y, uint256 denominator);
 
+    /// @notice the function calculates a sqrt(P) given another sqrt(P), liquidity, and input amount.
+    ///     It tells what the price will be after swapping the specified input amount of tokens, given the current price and liquidity.
+    /// @dev calculations:
+    ///     price_next = int((liq * q96 * sqrtp_cur) // (liq * q96 + amount_in * sqrtp_cur))  |  amount_in := token0
+    ///     price_next = sqrtp_cur + (amount_in * q96) // liq  |  amount_in := token1
     function getNextSqrtPriceBasedOnInput(
         uint160 _currentSqrtPriceX96,
         uint256 _liquidity,
@@ -56,56 +61,110 @@ library InternalMath {
     ///////////////////////////////////
     ///   Calculation Mathematical  ///
     ///////////////////////////////////
-    function calculateDeltaToken0(uint160 sqrtPriceAX96, uint160 sqrtPriceBX96, uint256 liquidity)
-        internal
-        pure
-        returns (uint256 amount0)
-    {
-        // amount0 = liquidity < 0
-        //     ? -int256(
-        //         calcAmount0Delta(
-        //             sqrtPriceAX96,
-        //             sqrtPriceBX96,
-        //             uint128(-liquidity),
-        //             false
-        //         )
-        //     )
-        //     : int256(
-        //         calcAmount0Delta(
-        //             sqrtPriceAX96,
-        //             sqrtPriceBX96,
-        //             uint128(liquidity),
-        //             true
-        //         )
-        //     );
-        amount0 = 0;
+    // @audit these three functions have not been audited
+    function calculateDeltaToken0(
+        uint160 sqrtPriceAX96,
+        uint160 sqrtPriceBX96,
+        uint128 liquidity,
+        bool roundUp
+    ) internal pure returns (uint256 amount0) {
+        if (sqrtPriceAX96 > sqrtPriceBX96)
+            (sqrtPriceAX96, sqrtPriceBX96) = (sqrtPriceBX96, sqrtPriceAX96);
+
+        require(sqrtPriceAX96 > 0);
+
+        uint256 numerator1 = uint256(liquidity) << FixedPoint96.RESOLUTION;
+        uint256 numerator2 = sqrtPriceBX96 - sqrtPriceAX96;
+
+        if (roundUp) {
+            amount0 = divRoundingUp(
+                mulDivRoundingUp(numerator1, numerator2, sqrtPriceBX96),
+                sqrtPriceAX96
+            );
+        } else {
+            amount0 =
+                mulDiv(numerator1, numerator2, sqrtPriceBX96) /
+                sqrtPriceAX96;
+        }
     }
 
     /// @notice Calculates amount1 delta between two prices
-    function calculateDeltaToken1(uint160 sqrtPriceAX96, uint160 sqrtPriceBX96, uint256 liquidity)
-        internal
-        pure
-        returns (uint256 amount1)
-    {
-        // amount1 = liquidity < 0
-        //     ? -int256(
-        //         calcAmount1Delta(
-        //             sqrtPriceAX96,
-        //             sqrtPriceBX96,
-        //             uint128(-liquidity),
-        //             false
-        //         )
-        //     )
-        //     : int256(
-        //         calcAmount1Delta(
-        //             sqrtPriceAX96,
-        //             sqrtPriceBX96,
-        //             uint128(liquidity),
-        //             true
-        //         )
-        //     );
-        amount1 = 0;
+    function calculateDeltaToken1(
+        uint160 sqrtPriceAX96,
+        uint160 sqrtPriceBX96,
+        uint128 liquidity,
+        bool roundUp
+    ) internal pure returns (uint256 amount1) {
+        if (sqrtPriceAX96 > sqrtPriceBX96)
+            (sqrtPriceAX96, sqrtPriceBX96) = (sqrtPriceBX96, sqrtPriceAX96);
+
+        if (roundUp) {
+            amount1 = mulDivRoundingUp(
+                liquidity,
+                (sqrtPriceBX96 - sqrtPriceAX96),
+                FixedPoint96.Q96
+            );
+        } else {
+            amount1 = mulDiv(
+                liquidity,
+                (sqrtPriceBX96 - sqrtPriceAX96),
+                FixedPoint96.Q96
+            );
+        }
     }
+
+    /// @notice Calculates amount0 delta between two prices
+    function calculateDeltaToken0(
+        uint160 sqrtPriceAX96,
+        uint160 sqrtPriceBX96,
+        int128 liquidity
+    ) internal pure returns (int256 amount0) {
+        amount0 = liquidity < 0
+            ? -int256(
+                calculateDeltaToken0(
+                    sqrtPriceAX96,
+                    sqrtPriceBX96,
+                    uint128(-liquidity),
+                    false
+                )
+            )
+            : int256(
+                calculateDeltaToken0(
+                    sqrtPriceAX96,
+                    sqrtPriceBX96,
+                    uint128(liquidity),
+                    true
+                )
+            );
+    }
+
+    /// @notice Calculates amount1 delta between two prices
+    function calculateDeltaToken1(
+        uint160 sqrtPriceAX96,
+        uint160 sqrtPriceBX96,
+        int128 liquidity
+    ) internal pure returns (int256 amount1) {
+        amount1 = liquidity < 0
+            ? -int256(
+                calculateDeltaToken1(
+                    sqrtPriceAX96,
+                    sqrtPriceBX96,
+                    uint128(-liquidity),
+                    false
+                )
+            )
+            : int256(
+                calculateDeltaToken1(
+                    sqrtPriceAX96,
+                    sqrtPriceBX96,
+                    uint128(liquidity),
+                    true
+                )
+            );
+    }
+
+
+
 
     function mulDivRoundingUp(uint256 a, uint256 b, uint256 denominator) internal pure returns (uint256 result) {
         result = mulDiv(a, b, denominator);
@@ -161,7 +220,7 @@ library InternalMath {
         }
     }
 
-    function mulDiv(uint256 x, uint256 y, uint256 denominator) pure returns (uint256 result) {
+    function mulDivision(uint256 x, uint256 y, uint256 denominator) public pure returns (uint256 result) {
         // 512-bit multiply [prod1 prod0] = x * y. Compute the product mod 2^256 and mod 2^256 - 1, then use
         // use the Chinese Remainder Theorem to reconstruct the 512-bit result. The result is stored in two 256
         // variables such that product = prod1 * 2^256 + prod0.
