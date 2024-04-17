@@ -7,18 +7,25 @@ import { LiquidityMath } from "./LiquidityMath.sol";
 
 library Position {
     struct Info {
+        // Liquidity amount belongs to this position.
         uint128 liquidity;
+        // fee growth per unit of liquidity based on latest fee update
         uint256 feeGrowthInside0LastX128;
+        // fee growth per unit of liquidity based on latest fee update
         uint256 feeGrowthInside1LastX128;
+        // the fees owed to the position owner in token0/token1
         uint128 tokensOwed0;
+        // the fees owed to the position owner in token0/token1
         uint128 tokensOwed1;
     }
 
+    // @audit should be removed.
     function update(Info storage self, uint128 _newLiquidity) internal {
         uint128 new_liquidity = self.liquidity + _newLiquidity;
         self.liquidity = new_liquidity;
     }
 
+    /// @notice This function returns position details related to the _owner and his tick boundries. 
     function get(mapping(bytes32 => Position.Info) storage self, address _owner, int24 _lowerTick, int24 _upperTick)
         internal
         view

@@ -31,12 +31,14 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     using TickBitmap for mapping(int16 word => uint256 value);
     using Position for Position.Info;
 
+    error UniswapV3SimulatorPool__FeeAccumulatedRelatedToThisPositionIsEmpty();
     error UniswapV3SimulatorPool__InsufficientInputAmount();
     error UniswapV3SimulatorPool__InlvalidTokenToSwap();
     error UniswapV3SimulatorPool__InvalidTickRange();
     error UniswapV3SimulatorPool__FlashRevertedUnpaid();
     error UniswapV3SimulatorPool__InvalidPriceSlippage();
     error UniswapV3SimulatorPool__InsufficientLiquidity(uint128 liquidity);
+    error UniswapV3SimulatorPool__InvalidAddress();
 
     event MintSucceed(
         address indexed sender,
@@ -55,6 +57,24 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         uint128 liquidity,
         int24 tick
     );
+
+    event BurnSucceed(
+        address caller,
+        int24 indexed lowerTick,
+        int24 indexed upperTick,
+        uint128 indexed liquidityAmount,
+        uint256 amount0Sent,
+        uint256 amount1Sent
+    );
+
+    event Collected(
+        address destination,
+        int24 lowerTick,
+        int24 upperTick,
+        uint128 indexed amount0,
+        uint128 indexed amount1
+    );
+
     event Flash(uint256 indexed amount0, uint256 indexed amount1, address owner);
     // uint256 fee0,
     // uint256 fee1,
@@ -108,9 +128,13 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     }
 
     struct ModifyPositionParams {
+        // The owner of the position
         address owner;
+        // lower tick of the position
         int24 lowerTick;
+        // upper tick of the position
         int24 upperTick;
+        // liquidity amount for change
         int128 liquidityDelta;
     }
 
@@ -199,6 +223,84 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
 
         emit MintSucceed(msg.sender, _owner, _lowerTick, _upperTick, amount0, amount1);
     }
+
+
+    /// @param _lowerTick The lower tick of the position for which to burn liquidity
+    /// @param _upperTick The upper tick of the position for which to burn liquidity
+    /// @param _amount How much liquidity to burn
+    /// @return amount0 The amount of token0 sent to the recipient
+    /// @return amount1 The amount of token1 sent to the recipient
+    /// @dev sending the porition of accumulated fees will accomplish in a seperated function called collect().
+    /// @notice During burning, the position will be updated and the token amounts it owes will be updated as well.
+    function burnLiquidity(int24 _lowerTick, int24 _upperTick, uint128 _amount)
+        external
+        lock()
+        returns(uint256 amount0, uint256 amount1)
+    {
+        // amount0Int and amount1Int are the amount of token0 and token1 owed to the pool,
+        //     negative if the pool should pay the recipient, like this situation.
+        (Position.Info storage info, int256 amount0Int, int256 amount1Int) = 
+            _modifyPosition(
+                ModifyPositionParams({
+                    owner: msg.sender,
+                    lowerTick: _lowerTick,
+                    upperTick: _upperTick,
+                    liquidityDelta: -int128(_amount)
+                })
+            );
+            
+        // amount0Int and amount1Int are both negative brcause the liquidityDelta is negative
+        amount0 = uint256(-amount0Int);
+        amount1 = uint256(-amount1Int);
+        
+        if (amount0 > 0 || amount1 > 0) {
+            // adding the fees owed to the position.
+            info.tokensOwed0 += amount0.toUint128();
+            info.tokensOwed1 += amount1.toUint128();
+        }
+        
+        emit BurnSucceed(msg.sender, _lowerTick, _upperTick, _amount, amount0, amount1);
+    }
+    
+    /// @notice this function is used for collecting the accumulated fees from a specific position.
+    /// @dev One of the amount requested might be zero, so for gathering whole fees we could pass the
+    ///     amount that is greater than the actual token owed amount or type(uint128).max.
+    /// @param _to is the address that will recieve the fees collected.
+    /// 
+    function collect(
+        address _to,
+        int24 _lowerTick,
+        int24 _upperTick,
+        uint128 _amount0Requested,
+        uint128 _amount1Requested
+    ) external lock nonReentrant returns (uint128 amount0, uint128 amount1) {
+        if (_to == address(0)) revert UniswapV3SimulatorPool__InvalidAddress();
+        if (_lowerTick > _upperTick) revert UniswapV3SimulatorPool__InvalidTickRange();
+
+        Position.Info storage info = positions.get(msg.sender, _lowerTick, _upperTick);
+        Position.Info memory tmp_info = info;
+
+        if(tmp_info.tokensOwed0 == 0 && tmp_info.tokensOwed1 == 0) revert UniswapV3SimulatorPool__FeeAccumulatedRelatedToThisPositionIsEmpty();
+
+        amount0 = (_amount0Requested > tmp_info.tokensOwed0 || _amount0Requested == type(uint128).max)
+            ? tmp_info.tokensOwed0 : _amount0Requested;
+        
+        amount1 = (_amount1Requested > tmp_info.tokensOwed1 || _amount1Requested == type(uint128).max)
+            ? tmp_info.tokensOwed0 : _amount1Requested;
+            
+        // follows CEI
+        if (amount0 > 0) {
+            info.tokensOwed0 -= amount0;
+            IERC20(token0).safeTransfer(_to, amount0);
+        }
+        if (amount1 > 0) {
+            info.tokensOwed1 -= amount1;
+            IERC20(token1).safeTransfer(_to, amount1);
+        }
+
+        emit Collected(_to, _lowerTick, _upperTick, amount0, amount1);
+    }  
+
 
     /*
      * @param _to is the address that we will send the amountOut of asked token.
@@ -305,7 +407,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
             }
         }
 
-        // @audit oracla functionality will change this scope.
+        // @audit-info oracla functionality will change this scope.
         if (slot.tick != state.tick) {
             // observation functionality.
 
@@ -379,6 +481,11 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     }
 
 
+    /// @notice use case : when we want to change the position.
+    /// @param params is the position detail that we want to change for the position.
+    /// @return position which is the storage position based on the owner and tick data.
+    /// @return amount0 the amount of token0 owed to the pool, negative if the pool should pay the recipient
+    /// @return amount1 the amount of token1 owed to the pool, negative if the pool should pay the recipient
     function _modifyPosition(ModifyPositionParams memory params)
     internal
     returns (Position.Info storage position, int256 amount0, int256 amount1) 

@@ -20,6 +20,7 @@ library Tick {
         uint256 feeGrowthOutside1X128;
     }
 
+    /// @notice Updates a tick and returns true if the tick was flipped from initialized to uninitialized, or vice versa
     function update(
         mapping(int24 => Tick.Info) storage self,
         int24 tick,
@@ -69,6 +70,8 @@ library Tick {
         liquidityDelta = info.liquidityNet;
     }
 
+
+    /// @notice in here we calculate the fee accumulated inside a price range
     function getFeeGrowthInside(
         mapping(int24 => Tick.Info) storage self,
         int24 lowerTick_,
@@ -91,11 +94,9 @@ library Tick {
             feeGrowthBelow1X128 = lowerTick.feeGrowthOutside1X128;
         } else {
             feeGrowthBelow0X128 =
-                feeGrowthGlobal0X128 -
-                lowerTick.feeGrowthOutside0X128;
+                feeGrowthGlobal0X128 - lowerTick.feeGrowthOutside0X128;
             feeGrowthBelow1X128 =
-                feeGrowthGlobal1X128 -
-                lowerTick.feeGrowthOutside1X128;
+                feeGrowthGlobal1X128 - lowerTick.feeGrowthOutside1X128;
         }
 
         uint256 feeGrowthAbove0X128;
@@ -104,21 +105,13 @@ library Tick {
             feeGrowthAbove0X128 = upperTick.feeGrowthOutside0X128;
             feeGrowthAbove1X128 = upperTick.feeGrowthOutside1X128;
         } else {
-            feeGrowthAbove0X128 =
-                feeGrowthGlobal0X128 -
-                upperTick.feeGrowthOutside0X128;
-            feeGrowthAbove1X128 =
-                feeGrowthGlobal1X128 -
-                upperTick.feeGrowthOutside1X128;
+            feeGrowthAbove0X128 = feeGrowthGlobal0X128 - upperTick.feeGrowthOutside0X128;
+            feeGrowthAbove1X128 = feeGrowthGlobal1X128 - upperTick.feeGrowthOutside1X128;
         }
 
-        feeGrowthInside0X128 =
-            feeGrowthGlobal0X128 -
-            feeGrowthBelow0X128 -
-            feeGrowthAbove0X128;
-        feeGrowthInside1X128 =
-            feeGrowthGlobal1X128 -
-            feeGrowthBelow1X128 -
-            feeGrowthAbove1X128;
+        // To calculate fee collected inside a position:
+        //     fr = fg - f(below lower tick) - f(above upper tick)
+        feeGrowthInside0X128 = feeGrowthGlobal0X128 - feeGrowthBelow0X128 - feeGrowthAbove0X128;
+        feeGrowthInside1X128 = feeGrowthGlobal1X128 - feeGrowthBelow1X128 - feeGrowthAbove1X128;
     }
 }

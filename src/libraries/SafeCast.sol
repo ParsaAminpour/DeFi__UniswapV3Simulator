@@ -25,4 +25,8 @@ library SafeCast {
         require(y < 2 ** 255);
         z = int256(y);
     }
+
+    function toUint128(uint256 x) internal pure returns (uint128 z) {
+        require((z = uint128(x)) == x, "OverflowUnderflow");
+    }
 }
