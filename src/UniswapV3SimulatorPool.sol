@@ -167,9 +167,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
 
     Slot0 public slot0;
 
-
     // a pool by default can store only 1 observation, which gets overwritten each time a new price is recorded
-
     Oracle.Observation[65535] public observations;
 
     address public immutable factory;
@@ -182,7 +180,6 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
 
     uint24 public immutable tickSpace;
     // uint128 public immutable maxLiquidityPerTick;
-    uint256 public constant FEE_PRECISION = 1e6;
 
     // @audit should be uint128 BTW
     uint128 public liquidity;
@@ -519,13 +516,10 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
      * @param _fee1 The fee amount in token1 due to the pool by the end of the flash
      * @param _data Any data passed through by the caller via the IUniswapV3PoolActions#flash call
     */
-    function flash(uint256 _amount0, uint256 _amount1, uint256 _fee0, uint256 _fee1, bytes memory _data)
+    function flash(uint256 _amount0, uint256 _amount1, /*uint256 _fee0*/ /*uint256 _fee1*/ bytes memory _data)
         external
     {
         require(_amount0 == 0 && _amount1 == 0, "UniswapV3SimulatorPool__InvalidAmounts");
-
-        uint256 fee0 = InternalMath.mulDivRoundingUp(_amount0, _fee0, FEE_PRECISION);
-        uint256 fee1 = InternalMath.mulDivRoundingUp(_amount1, _fee1, FEE_PRECISION);
 
         uint256 balance_before_flash0 = IERC20(token0).balanceOf(address(this));
         uint256 balance_before_flash1 = IERC20(token1).balanceOf(address(this));
@@ -533,12 +527,12 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         if (_amount0 > 0) IERC20(token0).safeTransfer(msg.sender, _amount0);
         if (_amount1 > 0) IERC20(token1).safeTransfer(msg.sender, _amount1);
         // tmp fee0 and fee1 amount.
-        IUniswapV3FlashCallback(msg.sender).uniswapV3FlashCallback(fee0, fee1, _data);
+        IUniswapV3FlashCallback(msg.sender).uniswapV3FlashCallback(0, 0, _data);
 
-        if (balance_before_flash0 + fee0 > IERC20(token0).balanceOf(address(this))) {
+        if (balance_before_flash0 > IERC20(token0).balanceOf(address(this))) {
             revert UniswapV3SimulatorPool__FlashRevertedUnpaid();
         }
-        if (balance_before_flash1 + fee1 > IERC20(token1).balanceOf(address(this))) {
+        if (balance_before_flash1 > IERC20(token1).balanceOf(address(this))) {
             revert UniswapV3SimulatorPool__FlashRevertedUnpaid();
         }
 
