@@ -41,6 +41,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     error UniswapV3SimulatorPool__InvalidPriceSlippage();
     error UniswapV3SimulatorPool__InsufficientLiquidity(uint128 liquidity);
     error UniswapV3SimulatorPool__InvalidAddress();
+    error UniswapV3SimulatorPool__AlreadyInitialized();
 
     event MintSucceed(
         address indexed sender,
@@ -77,7 +78,16 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         uint128 indexed amount1
     );
 
-    event Flash(uint256 indexed amount0, uint256 indexed amount1, address owner);
+    event Flash(
+        uint256 indexed amount0,
+        uint256 indexed amount1,
+        address owner
+    );
+
+    event Initialized(
+        uint160 indexed price_initialized,
+        int24 indexed tick_initialized
+    );
     // uint256 fee0,
     // uint256 fee1,
 
@@ -86,11 +96,26 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     int24 public constant MAX_TICK = -MIN_TICK;
     ////////////////////////////////////////////
 
-    // compresed slot0 data for pool managing
+    /// @dev compresed slot0 data for pool managing
+    /// @dev Observations could be expand when a new observation is saved and
+    ///     (nextObservationCardinality > observationCardinality) which signals that
+    ///     cardinality can be expanded. If not, the oldest observation get overwritten.
     struct Slot0 {
+        // currenct square root of price
         uint160 sqrtPriceX96;
+        // current tick
         int24 tick;
+        // Puaseable design pattern
         bool unlocked;
+        // tracks the most recent observation index
+        uint16 observationIndex;
+        // Maximum number of observations
+        // tracks the number of activated observations
+        // not all observations are activated by default!
+        uint16 observationCardinality;
+        // Next maximum number of observations
+        // tracks the next cardinality the array of observations can expand to
+        uint16 nextObservationCardinality;
     }
     
     /// @dev swap state maintain the current swap state.
@@ -142,6 +167,9 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
 
     Slot0 public slot0;
 
+
+    // a pool by default can store only 1 observation, which gets overwritten each time a new price is recorded
+
     Oracle.Observation[65535] public observations;
 
     address public immutable factory;
@@ -177,6 +205,28 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         tickSpace = tick_spacing;
         //@audit implementing maxLiquidity state variable.
     }
+
+
+    /// @notice the pool_initialize is for setting up the init price for the pool.
+    /// @param _initSqrtPrice is the initial price for the token0/token1 pair.
+    function pool_initialize(uint160 _initSqrtPrice) public {
+        if(slot0.sqrtPriceX96 != 0) revert UniswapV3SimulatorPool__AlreadyInitialized();
+        int24 init_tick = TickMath.getTickAtSqrtRatio(_initSqrtPrice);
+
+        (uint16 init_cardinality, uint16 init_cardinality_next) = observations.initialize(_timeStamp());
+        
+        slot0 = Slot0({
+            sqrtPriceX96: _initSqrtPrice,
+            tick: init_tick,
+            unlocked: true,
+            observationIndex: 0,
+            observationCardinality: init_cardinality,
+            nextObservationCardinality: init_cardinality_next
+        });
+
+        emit Initialized(_initSqrtPrice, init_tick);
+    }
+
 
     /*
      * @param _owenr is an address to track the owner of the liquidity.
@@ -414,10 +464,17 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
 
         // @audit-info oracla functionality will change this scope.
         if (slot.tick != state.tick) {
+            (uint16 newObservationIndex, uint16 newCardinality) = observations.write(
+                slot.observationIndex, slot.observationCardinality,
+                slot.nextObservationCardinality, slot.tick,
+                _timeStamp()
+            );
             // observation functionality.
-
-            (slot0.tick, slot0.sqrtPriceX96) = (state.tick, state.sqrtPriceX96);
+            (slot0.tick, slot0.sqrtPriceX96, slot0.observationIndex, slot0.nextObservationCardinality) =
+                (state.tick, state.sqrtPriceX96, newObservationIndex, newCardinality);
         }
+
+
         /////////////////////////////////////////////////////////
 
         if (_liq != state.liquidity) liquidity = state.liquidity;
@@ -596,5 +653,8 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     }
 
 
+    function _timeStamp() private view returns(uint32) {
+        return uint32(block.timestamp);        
+    }
 
 }
