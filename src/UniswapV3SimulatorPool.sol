@@ -42,6 +42,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     error UniswapV3SimulatorPool__InsufficientLiquidity(uint128 liquidity);
     error UniswapV3SimulatorPool__InvalidAddress();
     error UniswapV3SimulatorPool__AlreadyInitialized();
+    error UniswapV3SimulatorPool__ZeroAmountIsNotPermitted(); 
 
     event MintSucceed(
         address indexed sender,
@@ -88,13 +89,6 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         uint160 indexed price_initialized,
         int24 indexed tick_initialized
     );
-    // uint256 fee0,
-    // uint256 fee1,
-
-    ////// HARD-CODED AND WILL BE REMOVED ////// @audit
-    int24 public constant MIN_TICK = -887272;
-    int24 public constant MAX_TICK = -MIN_TICK;
-    ////////////////////////////////////////////
 
     /// @dev compresed slot0 data for pool managing
     /// @dev Observations could be expand when a new observation is saved and
@@ -241,21 +235,22 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         lock
         returns (uint256 amount0, uint256 amount1)
     {
-        if (_lowerTick < MIN_TICK || _upperTick > MAX_TICK || _lowerTick >= _upperTick) {
+        if (_lowerTick < TickMath.MIN_TICK || _upperTick > TickMath.MAX_TICK || _lowerTick >= _upperTick) {
             revert UniswapV3SimulatorPool__InvalidTickRange();
         }
+        if (_amount == 0) revert UniswapV3SimulatorPool__ZeroAmountIsNotPermitted();
 
-        // ticks.update(_lowerTick, _amount, true);
-        // ticks.update(_upperTick, _amount, false);
-
-        Position.Info storage position_info = positions.get(_owner, _lowerTick, _upperTick);
-        position_info.update(_amount);
-
-        // These values have been hard-coded and will be removed/replaced.
-        amount0 = 0.99 ether;
-        amount1 = 5000 ether;
-
-        liquidity += _amount;
+        (, int256 amount0Int, int256 amount1Int) = _modifyPosition(
+            ModifyPositionParams({
+                owner: _owner,
+                lowerTick: _lowerTick,
+                upperTick: _upperTick,
+                liquidityDelta: int128(_amount)
+            })
+        );
+        
+        amount0 = uint256(amount0Int);
+        amount1 = uint256(amount1Int);
 
         uint256 balance0Before;
         uint256 balance1Before;
@@ -266,10 +261,10 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         // unisawpV3MintVallback is implemented on NFTManager contract indeed.
         IUniswapV3MintCallback(msg.sender).uniswapV3MintCallback(amount0, amount1, _data);
 
-        if (amount0 == 0 && amount0 + balance0Before > balance0()) {
+        if (amount0 > 0 && amount0 + balance0Before > balance0()) {
             revert UniswapV3SimulatorPool__InsufficientInputAmount();
         }
-        if (amount1 == 0 && amount1 + balance1Before > balance1()) {
+        if (amount1 > 0 && amount1 + balance1Before > balance1()) {
             revert UniswapV3SimulatorPool__InsufficientInputAmount();
         }
 
@@ -508,6 +503,21 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         emit Swap(msg.sender, _to, amountIn, amountOut, slot0.sqrtPriceX96, liquidity, slot0.tick);
     }
 
+    
+    function observe(uint32[] calldata secondsAgos)
+    public
+    returns (int56[] memory tickCumulatives)
+    {
+        return
+            observations.observe(
+                _timeStamp(),
+                slot0.tick,
+                slot0.observationCardinality,
+                slot0.observationIndex,
+                secondsAgos
+            );
+    }
+    
     /*
      * @notice it is possible to borrow tokens during a swap, but you had to return them or an equal amount of the other pool token, in the same transaction.
      * @param _amount0 amount related to the token0.
