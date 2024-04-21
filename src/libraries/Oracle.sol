@@ -2,6 +2,7 @@
 pragma solidity 0.8.20;
 
 library Oracle {
+    error Oracle__TargetIsNotAtOrAfterTheOldestObservation();
     uint256 public constant COUNT = 65535;
 
     event ObservationGrowth(
@@ -110,6 +111,7 @@ library Oracle {
     /// @param self is the oracle array.
     /// @param _time is the current timestamp
     /// @param _timePoints Each amount of time to look back, in seconds, at which point to return an observation
+    ///        the list of time points that we want to get prices at.
     /// @param _tick is the current tick
     /// @param _cardinality the number of observation block.
     /// @param _index is the most recent observation index.
@@ -121,13 +123,24 @@ library Oracle {
         uint16 _cardinality,
         uint16 _index,
         uint32[] memory _timePoints
-    ) internal view returns(int24[] memory tickCumulatives) {}
+    ) internal returns(int56[] memory tickCumulatives) {
+        tickCumulatives = new int56[](_timePoints.length);
+
+        for (uint256 i = 0; i < _timePoints.length; i++) {
+            tickCumulatives[i] = observeSingle(
+                self, _time, _timePoints[i], _tick, _index, _cardinality);
+        }
+    }
 
 
     /// @dev Reverts if an observation at or before the desired observation timestamp does not exist.
     /// 0 may be passed as `secondsAgo' to return the current cumulative values.
     /// If called with a timestamp falling between two observations, returns the counterfactual accumulator values
     /// at exactly the timestamp between the two observations.
+    /// @dev If an older time point is requested, we need to make several checks before switching to the binary search algorithm:
+    ///     if the requested time point is the last observation, we can return the accumulated price at the latest observation;
+    ///     if the requested time point is after the last observation, we can call transform to find the accumulated price at this point, knowing the last observed price and the current price;
+    ///     `if the requested time point is before the last observation, we have to use the binary search.`
     /// @param self The stored oracle array
     /// @param _time The current block timestamp
     /// @param _secondsAgo The amount of time to look back, in seconds, at which point to return an observation
@@ -142,11 +155,46 @@ library Oracle {
         int24 _tick,
         uint16 _index,
         uint16 _cardinality
-    ) internal view returns (int56 tickCumulative) {
+    ) internal returns (int56 tickCumulative) {
         // If it wasn’t recorded in the current block, transform it to consider the current block and the current tick.
+        if (_secondsAgo == 0) {
+            Observation memory last = self[_index];
+            if (last.timestamp == 0) {
+                last = transform(last, _time, _tick);
+            }
+            return last.tickAccumulated;
+        }
+
+        uint32 target = _time - _secondsAgo;
+
+        (Observation memory ObservationAtOrBelow, Observation memory ObservationAtOrAbove) = getObservationBouderies(
+            self, _time, target, _tick, _index, _cardinality);
+
+        // when we are in the left side
+        if (target == ObservationAtOrBelow.timestamp) return ObservationAtOrBelow.tickAccumulated;
+        // when we are in the right side
+        else if (target == ObservationAtOrAbove.timestamp) return ObservationAtOrAbove.tickAccumulated;
+        // when are in the middle
+        else {
+            uint56 bounderiesTimeDelta = uint56(ObservationAtOrAbove.timestamp - ObservationAtOrBelow.timestamp);
+            uint56 targetTimeDelta = uint56(_time - ObservationAtOrBelow.timestamp);
+            // calculating tick cumulative
+            return ObservationAtOrBelow.tickAccumulated +
+                ((ObservationAtOrBelow.tickAccumulated - ObservationAtOrAbove.tickAccumulated) /
+                    int56(bounderiesTimeDelta)
+                ) * int56(targetTimeDelta);
+        }
     }
 
     
+    /// @notice Returns the range between two observations in which the requested time point is located.
+    /// @param _time is the current timestamp
+    /// @param _pricePointTarget is the target price point timestamp which has requested.
+    /// @param _index is the current most recent observation's index.
+    /// @param _cardinality is the available observation range known as cardinality.
+    /// @return ObservationAtOrBelow of the target price point timestamp.
+    /// @return ObservationAtOrAbove of the target price point timestamp.
+    /// @dev if the requested time point is before the last observation, we have to use the binary search (not anywhere).
     function observationBinarySearch(
         Observation[65535] storage self,
         uint32 _time,
@@ -176,8 +224,53 @@ library Oracle {
         }
     }
 
+
+    /// @notice Fetches the observations beforeOrAt and atOrAfter a given target, i.e. where [beforeOrAt, atOrAfter] is satisfied
+    /// @dev Used by observeSingle() to compute the counterfactual accumulator values as of a given block timestamp.
+    /// @param self is the stored oracle observation
+    /// @param _time is the current timestamp
+    /// @param _pricePointTarget is the target observation timestamp which the reserved observation should be for
+    /// @param _tick is the current tick
+    /// @param _index is the most recent observation index.
+    /// @param _cardinality is the observation array cardinality.
+    /// @return ObservationAtOrBelow the observation that occurred at or before based on the given timestamp.
+    /// @return ObservationAtOrAbove the observation that occurred at to after based on the given timestamp.
+    function getObservationBouderies(
+        Observation[65535] storage self,
+        uint32 _time,
+        uint32 _pricePointTarget,
+        int24 _tick,
+        uint16 _index,
+        uint16 _cardinality
+    ) private returns(Observation memory ObservationAtOrBelow, Observation memory ObservationAtOrAbove) {
+        // optimistically set before to the newest observation
+        ObservationAtOrBelow = self[_index];
+
+        // if the target is chronologically at or after the newest observation, we can early return
+        if (lte(_time, ObservationAtOrBelow.timestamp, _pricePointTarget)) {
+            if (ObservationAtOrBelow.timestamp == _pricePointTarget) {
+                // if newest observation equals target, we're in the same block, so we can ignore atOrAfter
+                return (ObservationAtOrBelow, ObservationAtOrAbove);
+            } else {
+                // otherwise, we need to transform
+                return (ObservationAtOrBelow, transform(ObservationAtOrBelow, _pricePointTarget, _tick));
+            }
+        }
+
+        // now, set before to the oldest observation
+        ObservationAtOrBelow = self[(_index + 1) % _cardinality];
+        if (!ObservationAtOrBelow.initialized) ObservationAtOrBelow = self[0];
+
+        // ensure that the target is chronologically at or after the oldest observation
+        if(!lte(_time, ObservationAtOrBelow.timestamp, _pricePointTarget)) revert Oracle__TargetIsNotAtOrAfterTheOldestObservation();
+
+        // if we've reached this point, we have to binary search
+        return observationBinarySearch(self, _time, _pricePointTarget, _index, _cardinality);
+    }
+
+
     /// @notice comparator for 32-bit timestamps
-    /// @dev safe for 0 or 1 overflows, a and b _must_ be chronologically before or equal to time
+    /// @dev a and b _must_ be chronologically before or equal to time
     /// @param time A timestamp truncated to 32 bits
     /// @param a A comparison timestamp from which to determine the relative position of `time`
     /// @param b From which to determine the relative position of `time`
