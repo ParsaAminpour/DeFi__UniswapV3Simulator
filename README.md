@@ -48,7 +48,7 @@ DETAILS WILL ADD ASAP.
 
 ## Authors
 
-- [@octokatherine](https://www.github.com/octokatherine)
+- [ParsaAmini](https://www.github.com/ParsaAminpour)
 
 
 ## Resources
