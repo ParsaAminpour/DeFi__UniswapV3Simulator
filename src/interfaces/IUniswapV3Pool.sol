@@ -14,9 +14,10 @@ interface IUniswapV3Pool {
         returns (
             uint160 sqrtPriceX96,
             int24 tick,
+            bool unlocked, // @audit added
             uint16 observationIndex,
             uint16 observationCardinality,
-            uint16 observationCardinalityNext
+            uint16 nextObservationCardinality
         );
 
     function factory() external view returns (address);
@@ -25,7 +26,7 @@ interface IUniswapV3Pool {
 
     function token1() external view returns (address);
 
-    function tickSpacing() external view returns (uint24);
+    function tickSpace() external view returns (uint24);
 
     function fee() external view returns (uint24);
 
@@ -41,32 +42,32 @@ interface IUniswapV3Pool {
         );
 
     function mint(
-        address owner,
-        int24 lowerTick,
-        int24 upperTick,
-        uint128 amount,
-        bytes calldata data
+        address _owner,
+        int24 _lowerTick,
+        int24 _upperTick,
+        uint128 _amount,
+        bytes calldata _data
     ) external returns (uint256 amount0, uint256 amount1);
 
     function burn(
-        int24 lowerTick,
-        int24 upperTick,
-        uint128 amount
+        int24 _lowerTick,
+        int24 _upperTick,
+        uint128 _amount
     ) external returns (uint256 amount0, uint256 amount1);
 
     function collect(
-        address recipient,
-        int24 lowerTick,
-        int24 upperTick,
-        uint128 amount0Requested,
-        uint128 amount1Requested
+        address _to,
+        int24 _lowerTick,
+        int24 _upperTick,
+        uint128 _amount0Requested,
+        uint128 _amount1Requested
     ) external returns (uint128 amount0, uint128 amount1);
 
     function swap(
-        address recipient,
-        bool zeroForOne,
-        uint256 amountSpecified,
+        address _to,
+        bool direction,
+        uint256 _amount,
         uint160 sqrtPriceLimitX96,
-        bytes calldata data
+        bytes calldata _data
     ) external returns (int256, int256);
 }

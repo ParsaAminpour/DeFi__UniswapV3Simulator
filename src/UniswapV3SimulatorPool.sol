@@ -229,7 +229,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
      * @return amount1 is the amount related to token1 that added to the pool based on the _amount.
      * @dev for consider slippage protection we won't manipulate the mint-core function, slippage protection will be implemented at the Interacttor contract.
      */
-    function mintLiquidity(address _owner, int24 _lowerTick, int24 _upperTick, uint128 _amount, bytes calldata _data)
+    function mint(address _owner, int24 _lowerTick, int24 _upperTick, uint128 _amount, bytes calldata _data)
         external
         nonReentrant
         lock
@@ -279,7 +279,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     /// @return amount1 The amount of token1 sent to the recipient
     /// @dev sending the porition of accumulated fees will accomplish in a seperated function called collect().
     /// @notice During burning, the position will be updated and the token amounts it owes will be updated as well.
-    function burnLiquidity(int24 _lowerTick, int24 _upperTick, uint128 _amount)
+    function burn(int24 _lowerTick, int24 _upperTick, uint128 _amount)
         external
         lock()
         returns(uint256 amount0, uint256 amount1)
@@ -642,7 +642,6 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         }
     }
 
-    
 
 
     ////////////////////////////////////////

@@ -9,9 +9,6 @@ remappings = ['@chainlink/contracts/=lib/chainlink-brownie-contracts/contracts/'
               '@prb-math/contracts=lib/prb-math/src',
               '@solmate/src=lib/solmate/src']
 
-gas_reports = ["EquilibriumCore"]
-# gas_reports_ignore = ["InstanceEquilibriumCore"]
-
 
 [etherscan]
 mainnet = { key = "${ETHERSCAN_API_KEY}" }
@@ -25,7 +22,7 @@ runs = 128
 depth = 128
 fail_on_revert = true
 
-fs_permissions = [{ access = "read-write", path = "./deployed_addresses.txt"}]
+fs_permissions = [{ access = "read", path = "."}]
 
 # IMPORTANT: should be false in production.
 ffi = true

@@ -14,15 +14,9 @@ library Position {
         // fee growth per unit of liquidity based on latest fee update
         uint256 feeGrowthInside1LastX128;
         // the fees owed to the position owner in token0/token1
-        uint128 tokensOwed0;
+        uint128 tokensOwed0; // used in collect function
         // the fees owed to the position owner in token0/token1
-        uint128 tokensOwed1;
-    }
-
-    // @audit should be removed.
-    function update(Info storage self, uint128 _newLiquidity) internal {
-        uint128 new_liquidity = self.liquidity + _newLiquidity;
-        self.liquidity = new_liquidity;
+        uint128 tokensOwed1; // used in collect function
     }
 
     /// @notice This function returns position details related to the _owner and his tick boundries. 
