@@ -1,5 +1,5 @@
 
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+![header](https://github.com/ParsaAminpour/DeFi__UniswapV3Simulator/assets/77713904/25f1f76c-2e7f-4aa9-a8f7-22852ae6605b)
 
 # UniswapV3 Simulator
 UniswapV3 Simulator on its name is a swap project which its architecture is broadly based on the UniswapV3.
@@ -52,4 +52,6 @@ DETAILS WILL ADD ASAP.
 
 
 ## Resources
-....
+[UniswapV3 Development Book](https://uniswapv3book.com/index.html)
+
+[UniswapV3 Algorithms Diagram](https://www.youtube.com/watch?v=WW_xRGXSr7Q&list=PLO5VPQH6OWdXp2_Nk8U7V-zh7suI05i0E&pp=iAQB)
