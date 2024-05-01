@@ -56,7 +56,8 @@ library Tick {
             : int128(int256(tickInfo.liquidityNet) + liquidityDelta);
     }
 
-    // We will calling this function inside the swap function when a tick is crossed to manipulate fees.
+    /// @notice We will calling this function inside the swap function when a tick is crossed to manipulate fees.
+    /// @notice Transitions to next tick as needed by price movement
     function cross(
         mapping(int24 => Tick.Info) storage self,
         int24 tick,

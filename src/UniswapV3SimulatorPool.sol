@@ -659,5 +659,4 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
     function _timeStamp() private view returns(uint32) {
         return uint32(block.timestamp);        
     }
-
 }

@@ -1,0 +1,17 @@
+Saving last configuration file to .certora_internal/24_05_01_15_49_13_226/run.conf
+contract name harnessWrapperCodeBase is the same as the file name and can be omitted from certora/harness/harnessWrapperCodeBase.sol:harnessWrapperCodeBase
+There is no TAC file. Going to script EVMVerifier/certoraBuild.py to main_with_args()
+Creating dir /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_49_13_226/.certora_config
+In /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/spec/bitMathFVC.spec, found the imports: []
+copying spec file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/spec/bitMathFVC.spec to /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_49_13_226/.certora_sources/.0_bitMathFVC.spec.spec
+writing /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_49_13_226/.certora_verify.json
+Path to typechecker is /home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar
+running ['java', '-jar', '/home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar', '-buildDirectory', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_49_13_226']
+Failed to compile spec files:
+[main] ERROR ALWAYS - Found errors in certora/spec/bitMathFVC.spec:
+[main] ERROR ALWAYS - Error in spec file (bitMathFVC.spec:36:5): Syntax error: unexpected token near `{`
+build failed
+Failure traceback: 
+CertoraUserInputError: CVL specification syntax check failed
+Encountered an error running Certora Prover:
+CVL specification syntax check failed

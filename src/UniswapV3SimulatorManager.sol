@@ -4,12 +4,14 @@ pragma solidity 0.8.20;
 
 import { IUniswapV3Manager } from "./interfaces/IUniswapV3Manager.sol";
 import { IUniswapV3Pool } from "./interfaces/IUniswapV3Pool.sol";
+import { UniswapV3SimulatorPool } from "./UniswapV3SimulatorPool.sol";
 import { IERC20 } from "@openzeppelin/contracts/interfaces/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {LiquidityMath} from "./libraries/LiquidityMath.sol";
 import { PoolAddress } from "./libraries/PoolAddress.sol";
 import {TickMath} from "./libraries/TickMath.sol";
 import { Path } from "./libraries/Path.sol";
+import {console } from "forge-std/console.sol";
 
 /// @author Parsa Amini (parsa.aminpour@gmail.com)
 /// @notice this conrtact is seperated from core contract to be more use-friendly in UI interaction.
@@ -51,7 +53,10 @@ contract UniswapV3SimulatorManager is IUniswapV3Manager {
     {
         IUniswapV3Pool pool = getPool(params.tokenA, params.tokenB, params.fee);
 
+        // console.log("the pool address in mint of manager is ", address(pool));
+
         (uint160 sqrtPriceX96, , , , , ) = pool.slot0();
+
         uint160 sqrtPriceLowerX96 = TickMath.getSqrtRatioAtTick(
             params.lowerTick
         );

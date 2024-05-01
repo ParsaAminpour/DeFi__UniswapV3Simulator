@@ -25,7 +25,6 @@ library NFTRenderer {
     }
 
     /// @notice we’ll first render an SVG, then a JSON
-
     function render(RenderParams memory params)
         internal
         view
@@ -36,8 +35,7 @@ library NFTRenderer {
         IERC20 token1 = IERC20(pool.token1());
         string memory symbol0 = token0.symbol();
         string memory symbol1 = token1.symbol();
-        
-        // rendering SVG template.
+
         string memory image = string.concat(
             "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 480'>",
             "<style>.tokens { font: bold 30px sans-serif; }",
@@ -79,7 +77,12 @@ library NFTRenderer {
     // INTERNAL
     //
     ////////////////////////////////////////////////////////////////////////////
-    
+    // @audit-info re-write it in assembly to optimize gas and verify this result with assembly one via Certora FVC.
+    function generateHue(address _owner, int24 _lowerTick, int24 _upperTick) private pure returns(uint256) {
+        bytes32 key = keccak256(abi.encodePacked(_owner, _lowerTick, _upperTick));
+        return uint256(key) % 360;
+    }
+
     /// @notice The background is simply two rects.
     ///     To render them we need to find the unique hue of this token and then we concatenate all the pieces together.
     function renderBackground(
@@ -87,8 +90,7 @@ library NFTRenderer {
         int24 lowerTick,
         int24 upperTick
     ) internal pure returns (string memory background) {
-        bytes32 key = keccak256(abi.encodePacked(owner, lowerTick, upperTick));
-        uint256 hue = uint256(key) % 360;
+        uint256 hue = generateHue(owner, lowerTick, upperTick);
 
         background = string.concat(
             '<rect width="300" height="480" fill="hsl(',
@@ -139,6 +141,7 @@ library NFTRenderer {
     }
 
     /// @notice A token description is a text string that contains all the same information that we render in the token’s SVG.
+    /// @notice the result will be used in JSON.
     function renderDescription(
         string memory symbol0,
         string memory symbol1,
@@ -181,7 +184,7 @@ library NFTRenderer {
         tickString = string.concat(
             _tick < 0 ? "-" : "",
             _tick < 0
-                ? Strings.toString(uint256(uint24(_tick)))
+                ? Strings.toString(uint256(uint24(-_tick)))
                 : Strings.toString(uint256(uint24(_tick)))
         );
     }

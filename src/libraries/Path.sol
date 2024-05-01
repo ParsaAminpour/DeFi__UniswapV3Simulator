@@ -51,10 +51,10 @@ library Path {
     function decodeFirstPool(bytes memory path)
         internal
         pure
-        returns (address token0, uint24 tickSpace, address token1)
+        returns (address token0, uint24 fee, address token1)
     {
         token0 = path.toAddress(START_INDEX);
-        tickSpace = path.toUint24(ADDRESS_LENGTH);
+        fee = path.toUint24(ADDRESS_LENGTH);
         token1 = path.toAddress(SINGLE_TOKEN_OFFSET);
     }
 }

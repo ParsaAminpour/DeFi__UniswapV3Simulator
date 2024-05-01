@@ -1,0 +1,34 @@
+Saving last configuration file to .certora_internal/24_05_01_14_52_01_502/run.conf
+There is no TAC file. Going to script EVMVerifier/certoraBuild.py to main_with_args()
+Creating dir /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_14_52_01_502/.certora_config
+In /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/spec/bitMathFVC.spec, found the imports: []
+copying spec file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/spec/bitMathFVC.spec to /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_14_52_01_502/.certora_sources/.0_bitMathFVC.spec.spec
+writing /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_14_52_01_502/.certora_verify.json
+Path to typechecker is /home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar
+running ['java', '-jar', '/home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar', '-buildDirectory', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_14_52_01_502']
+
+building file certora/harness/harnessWrapperCodeBase.sol
+Running cmd solc -o ".certora_internal/24_05_01_14_52_01_502/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator",.,"lib/forge-std/src" --standard-json
+stdout, stderr = .certora_internal/24_05_01_14_52_01_502/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stdout, .certora_internal/24_05_01_14_52_01_502/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stderr
+Exitcode 0
+Solc run solc -o ".certora_internal/24_05_01_14_52_01_502/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator",.,"lib/forge-std/src" --standard-json time: 0.116
+reading standard json data from .certora_internal/24_05_01_14_52_01_502/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stdout
+build failed
+Failure traceback: 
+CertoraUserInputError: solc had an error:
+ParserError: Source "/home/jonathan/Desktop/Projects/src/libraries/BitMath.sol" not found: File not found. Searched the following locations: "".
+ --> /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol:4:1:
+  |
+4 | import {BitMath} from "../../../../src/libraries/BitMath.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Encountered an error running Certora Prover:
+solc had an error:
+ParserError: Source "/home/jonathan/Desktop/Projects/src/libraries/BitMath.sol" not found: File not found. Searched the following locations: "".
+ --> /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol:4:1:
+  |
+4 | import {BitMath} from "../../../../src/libraries/BitMath.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+

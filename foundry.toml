@@ -26,5 +26,3 @@ fs_permissions = [{ access = "read", path = "."}]
 
 # IMPORTANT: should be false in production.
 ffi = true
-
-# See more config options https://github.com/foundry-rs/foundry/tree/master/config

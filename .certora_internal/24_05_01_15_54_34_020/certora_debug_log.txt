@@ -1,0 +1,77 @@
+Saving last configuration file to .certora_internal/24_05_01_15_54_34_020/run.conf
+contract name harnessWrapperCodeBase is the same as the file name and can be omitted from certora/harness/harnessWrapperCodeBase.sol:harnessWrapperCodeBase
+Failed to find the latest package version of certora-cli. Local version is 7.3.0
+There is no TAC file. Going to script EVMVerifier/certoraBuild.py to main_with_args()
+Creating dir /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_config
+In /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/spec/bitMathFVC.spec, found the imports: []
+copying spec file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/spec/bitMathFVC.spec to /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/.0_bitMathFVC.spec.spec
+writing /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_verify.json
+Path to typechecker is /home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar
+running ['java', '-jar', '/home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar', '-buildDirectory', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020']
+
+building file certora/harness/harnessWrapperCodeBase.sol
+Running cmd solc -o ".certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator",.,"lib/forge-std/src" --standard-json
+stdout, stderr = .certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stdout, .certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stderr
+Exitcode 0
+Solc run solc -o ".certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator",.,"lib/forge-std/src" --standard-json time: 0.1017
+reading standard json data from .certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stdout
+Running cmd solc --version
+stdout, stderr = .certora_internal/24_05_01_15_54_34_020/.certora_config/version_check_solc.stdout, .certora_internal/24_05_01_15_54_34_020/.certora_config/version_check_solc.stderr
+Exitcode 0
+Solc run solc --version time: 0.0883
+collecting worklist for /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol
+Processing dependencies from file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol
+available keys: dict_keys(['/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/src/libraries/BitMath.sol'])
+Adding internal link ref /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/src/libraries/BitMath.sol to worklist
+Processing dependencies from file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/src/libraries/BitMath.sol
+available keys: dict_keys(['/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/src/libraries/BitMath.sol'])
+Contracts in harnessWrapperCodeBase.sol_0 (file certora/harness/harnessWrapperCodeBase.sol): ['harnessWrapperCodeBase']
+Contracts with their chosen addresses: [(274184521717934524641157099916833587200, '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol:harnessWrapperCodeBase'), (274184521717934524641157099916833587201, '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/src/libraries/BitMath.sol:BitMath')]
+Working on contract harnessWrapperCodeBase
+Working on contract harnessWrapperCodeBase
+Working on contract BitMath
+Working on contract BitMath
+For contracts of primary harnessWrapperCodeBase
+finding primary contract address of /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol:harnessWrapperCodeBase in [(274184521717934524641157099916833587200, '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol:harnessWrapperCodeBase'), (274184521717934524641157099916833587201, '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/src/libraries/BitMath.sol:BitMath')]
+Contracts in SDC harnessWrapperCodeBase.sol_0: ['harnessWrapperCodeBase', 'BitMath']
+Building source tree
+Copying /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/src/libraries/BitMath.sol to .certora_internal/24_05_01_15_54_34_020/.certora_sources/src/libraries/BitMath.sol
+Copying /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/conf/bitMathFVC.conf to .certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/conf/bitMathFVC.conf
+Copying /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/harness/harnessWrapperCodeBase.sol to .certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/harness/harnessWrapperCodeBase.sol
+Copying /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/spec/bitMathFVC.spec to .certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/spec/bitMathFVC.spec
+Copying /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/remappings.txt to .certora_internal/24_05_01_15_54_34_020/.certora_sources/remappings.txt
+Backing up current .certora_sources to .certora_internal/24_05_01_15_54_34_020/.certora_sources/.pre_autofinders.0
+Running cmd solc -o ".certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources",.,"/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/lib/forge-std/src" --standard-json
+stdout, stderr = .certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stdout, .certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stderr
+Exitcode 0
+Solc run solc -o ".certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0/" --overwrite --allow-paths "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources",.,"/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/lib/forge-std/src" --standard-json time: 0.1218
+reading standard json data from .certora_internal/24_05_01_15_54_34_020/.certora_config/harnessWrapperCodeBase.sol_0.standard.json.stdout
+collecting worklist for /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/harness/harnessWrapperCodeBase.sol
+Processing dependencies from file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/harness/harnessWrapperCodeBase.sol
+available keys: dict_keys(['/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/harness/harnessWrapperCodeBase.sol', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/src/libraries/BitMath.sol'])
+Adding internal link ref /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/src/libraries/BitMath.sol to worklist
+Processing dependencies from file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/src/libraries/BitMath.sol
+available keys: dict_keys(['/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/harness/harnessWrapperCodeBase.sol', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/src/libraries/BitMath.sol'])
+Contracts in harnessWrapperCodeBase.sol_0 (file .certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/harness/harnessWrapperCodeBase.sol): ['harnessWrapperCodeBase']
+Contracts with their chosen addresses: [(274184521717934524641157099916833587202, '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/harness/harnessWrapperCodeBase.sol:harnessWrapperCodeBase'), (274184521717934524641157099916833587203, '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/src/libraries/BitMath.sol:BitMath')]
+Working on contract harnessWrapperCodeBase
+Working on contract harnessWrapperCodeBase
+Working on contract BitMath
+Working on contract BitMath
+For contracts of primary harnessWrapperCodeBase
+finding primary contract address of /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/harness/harnessWrapperCodeBase.sol:harnessWrapperCodeBase in [(274184521717934524641157099916833587202, '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/certora/harness/harnessWrapperCodeBase.sol:harnessWrapperCodeBase'), (274184521717934524641157099916833587203, '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_sources/src/libraries/BitMath.sol:BitMath')]
+Contracts in SDC harnessWrapperCodeBase.sol_0: ['harnessWrapperCodeBase', 'BitMath']
+Backing up instrumented .certora_sources to .certora_internal/24_05_01_15_54_34_020/.certora_sources/.post_autofinders.0
+Rolling back .certora_sources to .certora_internal/24_05_01_15_54_34_020/.certora_sources/.pre_autofinders.0 version
+Libraries to add = []
+writing /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_verify.json
+writing file /home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020/.certora_build.json
+Path to typechecker is /home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar
+running ['java', '-jar', '/home/jonathan/.local/lib/python3.10/site-packages/certora_jars/Typechecker.jar', '-buildDirectory', '/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/.certora_internal/24_05_01_15_54_34_020', '-typeCheck']
+Failed to compile spec files:
+[main] ERROR ALWAYS - Found errors in certora/spec/bitMathFVC.spec:
+[main] ERROR ALWAYS - Error in spec file (bitMathFVC.spec:27:12): You may not access the return value of a call to a `method` variable.
+Failure traceback: 
+CertoraUserInputError: CVL specification syntax and type check failed
+Encountered an error running Certora Prover:
+CVL specification syntax and type check failed

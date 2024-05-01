@@ -1,0 +1,13 @@
+{
+    "topics": [
+        {
+            "name": "type_check",
+            "messages": [
+                {
+                    "message": "Error in spec file (bitMathFVC.spec:22:1): Syntax error: unexpected token near `This`",
+                    "location": []
+                }
+            ]
+        }
+    ]
+}

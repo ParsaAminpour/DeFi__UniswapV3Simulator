@@ -1,0 +1,181 @@
+{
+    "harnessWrapperCodeBase_00000000ce4604a0000000000000000000000002": {
+        "contracts": [
+            {
+                "address": "00000000ce4604a0000000000000000000000002",
+                "allMethods": [
+                    {
+                        "contractName": "harnessWrapperCodeBase",
+                        "fullArgs": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "isLibrary": false,
+                        "name": "findMostSignificantBit",
+                        "notpayable": true,
+                        "paramNames": [
+                            "x"
+                        ],
+                        "returns": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint8",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "sighash": "483d868d",
+                        "stateMutability": "pure",
+                        "visibility": "external"
+                    }
+                ],
+                "bytecode": "608060405234801561000f575f80fd5b5060043610610029575f3560e01c8063483d868d1461002d575b5f80fd5b61004760048036038101906100429190610259565b61005d565b604051610054919061029f565b60405180910390f35b5f6100678261006e565b9050919050565b5f64f196e500007fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000000005260017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000000015260017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0000000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00006000525f821161010d575f80fd5b700100000000000000000000000000000000821061013c57608082901c915060808161013991906102e5565b90505b68010000000000000000821061016357604082901c915060408161016091906102e5565b90505b640100000000821061018657602082901c915060208161018391906102e5565b90505b6201000082106101a757601082901c91506010816101a491906102e5565b90505b61010082106101c757600882901c91506008816101c491906102e5565b90505b601082106101e657600482901c91506004816101e391906102e5565b90505b6004821061020557600282901c915060028161020291906102e5565b90505b6002821061021d5760018161021a91906102e5565b90505b919050565b5f80fd5b5f819050919050565b61023881610226565b8114610242575f80fd5b50565b5f813590506102538161022f565b92915050565b5f6020828403121561026e5761026d610222565b5b5f61027b84828501610245565b91505092915050565b5f60ff82169050919050565b61029981610284565b82525050565b5f6020820190506102b25f830184610290565b92915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f6102ef82610284565b91506102fa83610284565b9250828201905060ff811115610313576103126102b8565b5b9291505056fea2646970667358221220030501d61b189f8e00b4562527c2cb98f170e2fccea4176f2d072dbf37de585b64736f6c63430008140033",
+                "compilerName": "solc",
+                "compilerParameters": {
+                    "optimizerOn": false,
+                    "optimizerRuns": null,
+                    "type": "SolcParameters",
+                    "viaIR": false
+                },
+                "compilerVersion": "0.8.20",
+                "constructorBytecode": "608060405234801561000f575f80fd5b5061034f8061001d5f395ff3fe608060405234801561000f575f80fd5b5060043610610029575f3560e01c8063483d868d1461002d575b5f80fd5b61004760048036038101906100429190610259565b61005d565b604051610054919061029f565b60405180910390f35b5f6100678261006e565b9050919050565b5f64f196e500007fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000000005260017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000000015260017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0000000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00006000525f821161010d575f80fd5b700100000000000000000000000000000000821061013c57608082901c915060808161013991906102e5565b90505b68010000000000000000821061016357604082901c915060408161016091906102e5565b90505b640100000000821061018657602082901c915060208161018391906102e5565b90505b6201000082106101a757601082901c91506010816101a491906102e5565b90505b61010082106101c757600882901c91506008816101c491906102e5565b90505b601082106101e657600482901c91506004816101e391906102e5565b90505b6004821061020557600282901c915060028161020291906102e5565b90505b6002821061021d5760018161021a91906102e5565b90505b919050565b5f80fd5b5f819050919050565b61023881610226565b8114610242575f80fd5b50565b5f813590506102538161022f565b92915050565b5f6020828403121561026e5761026d610222565b5b5f61027b84828501610245565b91505092915050565b5f60ff82169050919050565b61029981610284565b82525050565b5f6020820190506102b25f830184610290565b92915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f6102ef82610284565b91506102fa83610284565b9250828201905060ff811115610313576103126102b8565b5b9291505056fea2646970667358221220030501d61b189f8e00b4562527c2cb98f170e2fccea4176f2d072dbf37de585b64736f6c63430008140033",
+                "constructorSrcmap": "321:172:0:-:0;;;;;;;;;;;;;;;;;;;",
+                "file": "certora/harness/harnessWrapperCodeBase.sol",
+                "immutables": [],
+                "internalFunctions": {
+                    "0xf196e50000": {
+                        "canonicalId": "src/libraries/BitMath.sol|BitMath",
+                        "declaringContract": "BitMath",
+                        "method": {
+                            "contractName": "BitMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "findMostSignificantBit",
+                            "notpayable": true,
+                            "paramNames": [
+                                "x"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint8",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50001": {
+                        "canonicalId": "src/libraries/BitMath.sol|BitMath",
+                        "declaringContract": "BitMath",
+                        "method": {
+                            "contractName": "BitMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "leastSignificantBit",
+                            "notpayable": true,
+                            "paramNames": [
+                                "x"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint8",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    }
+                },
+                "is_static_address": false,
+                "lang": "Solidity",
+                "methods": [
+                    {
+                        "contractName": "harnessWrapperCodeBase",
+                        "fullArgs": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "isLibrary": false,
+                        "name": "findMostSignificantBit",
+                        "notpayable": true,
+                        "paramNames": [
+                            "x"
+                        ],
+                        "returns": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint8",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "sighash": "483d868d",
+                        "stateMutability": "pure",
+                        "visibility": "external"
+                    }
+                ],
+                "name": "harnessWrapperCodeBase",
+                "original_file": "certora/harness/harnessWrapperCodeBase.sol",
+                "solidityTypes": [],
+                "srcmap": "321:172:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;359:132;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;;425:7;451:33;482:1;451:30;:33::i;:::-;444:40;;359:132;;;:::o;582:1292:1:-;648:7;744:13;676:66;669:89;834:1;766:66;759:77;912:1;844:66;837:77;990:1;922:66;915:77;1015:1;1011;:5;1003:14;;;;;;1069:35;1064:1;:40;1060:102;;1126:3;1120:9;;;;;1148:3;1143:8;;;;;:::i;:::-;;;1060:102;1212:19;1207:1;:24;1203:84;;1253:2;1247:8;;;;;1274:2;1269:7;;;;;:::i;:::-;;;1203:84;1337:11;1332:1;:16;1328:76;;1370:2;1364:8;;;;;1391:2;1386:7;;;;;:::i;:::-;;;1328:76;1454:7;1449:1;:12;1445:72;;1483:2;1477:8;;;;;1504:2;1499:7;;;;;:::i;:::-;;;1445:72;1566:5;1561:1;:10;1557:68;;1593:1;1587:7;;;;;1613:1;1608:6;;;;;:::i;:::-;;;1557:68;1674:4;1669:1;:9;1665:67;;1700:1;1694:7;;;;;1720:1;1715:6;;;;;:::i;:::-;;;1665:67;1781:3;1776:1;:8;1772:66;;1806:1;1800:7;;;;;1826:1;1821:6;;;;;:::i;:::-;;;1772:66;1856:3;1851:1;:8;1847:20;;1866:1;1861:6;;;;;:::i;:::-;;;1847:20;582:1292;;;:::o;88:117:2:-;197:1;194;187:12;334:77;371:7;400:5;389:16;;334:77;;;:::o;417:122::-;490:24;508:5;490:24;:::i;:::-;483:5;480:35;470:63;;529:1;526;519:12;470:63;417:122;:::o;545:139::-;591:5;629:6;616:20;607:29;;645:33;672:5;645:33;:::i;:::-;545:139;;;;:::o;690:329::-;749:6;798:2;786:9;777:7;773:23;769:32;766:119;;;804:79;;:::i;:::-;766:119;924:1;949:53;994:7;985:6;974:9;970:22;949:53;:::i;:::-;939:63;;895:117;690:329;;;;:::o;1025:86::-;1060:7;1100:4;1093:5;1089:16;1078:27;;1025:86;;;:::o;1117:112::-;1200:22;1216:5;1200:22;:::i;:::-;1195:3;1188:35;1117:112;;:::o;1235:214::-;1324:4;1362:2;1351:9;1347:18;1339:26;;1375:67;1439:1;1428:9;1424:17;1415:6;1375:67;:::i;:::-;1235:214;;;;:::o;1455:180::-;1503:77;1500:1;1493:88;1600:4;1597:1;1590:15;1624:4;1621:1;1614:15;1641:188;1679:3;1698:18;1714:1;1698:18;:::i;:::-;1693:23;;1730:18;1746:1;1730:18;:::i;:::-;1725:23;;1771:1;1768;1764:9;1757:16;;1794:4;1789:3;1786:13;1783:39;;;1802:18;;:::i;:::-;1783:39;1641:188;;;;:::o",
+                "storageLayout": {
+                    "storage": [],
+                    "types": null
+                },
+                "types": [],
+                "varmap": ""
+            }
+        ],
+        "legacyStructLinking": {},
+        "library_addresses": [],
+        "primary_contract": "harnessWrapperCodeBase",
+        "primary_contract_address": "00000000ce4604a0000000000000000000000002",
+        "prototypeFor": [],
+        "sdc_name": "harnessWrapperCodeBase.sol_0",
+        "sourceDir": ".post_autofinders.0",
+        "srclist": {
+            "0": "certora/harness/harnessWrapperCodeBase.sol",
+            "1": "src/libraries/BitMath.sol"
+        },
+        "state": {},
+        "structLinkingInfo": {}
+    }
+}
