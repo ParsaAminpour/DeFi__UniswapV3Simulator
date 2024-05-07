@@ -1,0 +1,24 @@
+{
+    "CLI_version": "7.3.0",
+    "branch": "main",
+    "conf": {
+        "files": [
+            "certora/harness/InternalMathHarness.sol:InternalMathHarness"
+        ],
+        "msg": "Verification of BitMath mostSignigicantBit functionality",
+        "optimistic_loop": true,
+        "process": "emv",
+        "rule_sanity": "basic",
+        "verify": "InternalMathHarness:certora/spec/internalMathFVC.spec",
+        "wait_for_results": "all"
+    },
+    "cwd_relative": ".",
+    "dirty": true,
+    "origin": "https://github.com/ParsaAminpour/DeFi__UniswapV3Simulator.git",
+    "raw_args": [
+        "/home/jonathan/.local/bin/certoraRun",
+        "./certora/conf/internalMathFVC.conf"
+    ],
+    "revision": "4df063f7e63742074f3caccd5e3b4be1d12c9ad5",
+    "timestamp": "1715065222.267433"
+}

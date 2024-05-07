@@ -1,0 +1,8 @@
+{
+    "importFilesToOrigRelpaths": {},
+    "primary_contract": "InternalMathHarness",
+    "specfile": "/home/jonathan/Desktop/Projects/web3/DeFi__UniswapV3Simulator/certora/spec/internalMathFVC.spec",
+    "specfileOrigRelpath": "certora/spec/internalMathFVC.spec",
+    "specfilesToImportDecls": {},
+    "type": "spec"
+}

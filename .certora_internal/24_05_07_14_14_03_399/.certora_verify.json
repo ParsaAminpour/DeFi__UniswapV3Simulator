@@ -1,0 +1,8 @@
+{
+    "importFilesToOrigRelpaths": {},
+    "primary_contract": "InternalMathHarness",
+    "specfile": "certora/spec/internalMathFVC.spec",
+    "specfileOrigRelpath": "certora/spec/internalMathFVC.spec",
+    "specfilesToImportDecls": {},
+    "type": "spec"
+}

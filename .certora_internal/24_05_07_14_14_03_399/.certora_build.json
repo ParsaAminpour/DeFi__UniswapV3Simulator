@@ -1,0 +1,1075 @@
+{
+    "InternalMathHarness_00000000ce4604a0000000000000000000000003": {
+        "contracts": [
+            {
+                "address": "00000000ce4604a0000000000000000000000003",
+                "allMethods": [
+                    {
+                        "contractName": "InternalMathHarness",
+                        "fullArgs": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint160",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "bool",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "isLibrary": false,
+                        "name": "getNextSqrtPriceBasedOnInput",
+                        "notpayable": true,
+                        "paramNames": [
+                            "_currentSqrtPriceX96",
+                            "_liquidity",
+                            "_amountRemaining",
+                            "direction"
+                        ],
+                        "returns": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint160",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "sighash": "bd80d87b",
+                        "stateMutability": "pure",
+                        "visibility": "external"
+                    },
+                    {
+                        "contractName": "InternalMathHarness",
+                        "fullArgs": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "isLibrary": false,
+                        "name": "mulDivRoundingUp",
+                        "notpayable": true,
+                        "paramNames": [
+                            "a",
+                            "b",
+                            "denominator"
+                        ],
+                        "returns": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "sighash": "0af8b27f",
+                        "stateMutability": "pure",
+                        "visibility": "external"
+                    }
+                ],
+                "bytecode": "608060405234801561000f575f80fd5b5060043610610034575f3560e01c80630af8b27f14610038578063bd80d87b14610068575b5f80fd5b610052600480360381019061004d9190610aeb565b610098565b60405161005f9190610b4a565b60405180910390f35b610082600480360381019061007d9190610be1565b6100ad565b60405161008f9190610c54565b60405180910390f35b5f6100a48484846100c4565b90509392505050565b5f6100ba858585856101bf565b9050949350505050565b5f64f196e500077fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000700005260037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000700015260497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0007000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000760025261016384848461027f565b90505f828061017557610174610c6d565b5b84860911156101b8577fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff81106101a9575f80fd5b80806101b490610cc7565b9150505b9392505050565b5f64f196e500007fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000000005260047fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00000001526102497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0000000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00006003528161026957610264858585610424565b610275565b610274858585610521565b5b9050949350505050565b5f64f196e5000d7fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000d00005260037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000d00015260497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000d000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000d6002525f805f198587098587029250828110838203039150505f810361034a578382816103405761033f610c6d565b5b049250505061041d565b838110610392578585856040517fa588cd5500000000000000000000000000000000000000000000000000000000815260040161038993929190610d0e565b60405180910390fd5b5f8486880990508281118203915080830392505f6001861901861690505f81870496508185049450600182835f0304019050808402851794505f60028860030218905080880260020381029050808802600203810290508088026002038102905080880260020381029050808802600203810290508088026002038102905080860296505050505050505b9392505050565b5f64f196e500037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000300005260037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000300015260497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0003000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00036002525f606060ff1683901b90505f6104d66104d18387610691565b610777565b90506105166105118773ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff16610834565b610777565b925050509392505050565b5f64f196e500017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000100005260037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000100015260497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0001000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00016002525f606060ff1684901b90505f6105e1848773ffffffffffffffffffffffffffffffffffffffff16610912565b90508573ffffffffffffffffffffffffffffffffffffffff1684826106069190610d43565b03610649575f6106168284610834565b905061064161063c8873ffffffffffffffffffffffffffffffffffffffff1685846100c4565b610777565b935050610688565b61068561068083610670858a73ffffffffffffffffffffffffffffffffffffffff16610691565b8761067b9190610d73565b610a0f565b610777565b92505b50509392505050565b5f64f196e5000b7fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000b00005260027fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000b00015260097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000b000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000b6001525f820361075e576040517f378ee0ed00000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b81838161076e5761076d610c6d565b5b04905092915050565b5f64f196e5000e7fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000e00005260017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000e00015260017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000e000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000e600052818291508173ffffffffffffffffffffffffffffffffffffffff161461082f575f80fd5b919050565b5f64f196e500097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000900005260027fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000900015260097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0009000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00096001525f828401905083811015610908576040517f5e88c46200000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b8091505092915050565b5f64f196e5000a7fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000a00005260027fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000a00015260097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000a000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000a6001525f83036109b5575f9050610a09565b5f8284029050828482816109cc576109cb610c6d565b5b0414610a04576040517f5e88c46200000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b809150505b92915050565b5f64f196e500087fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000800005260027fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000800015260097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0008000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00086001525f8284061182840401905092915050565b5f80fd5b5f819050919050565b610aca81610ab8565b8114610ad4575f80fd5b50565b5f81359050610ae581610ac1565b92915050565b5f805f60608486031215610b0257610b01610ab4565b5b5f610b0f86828701610ad7565b9350506020610b2086828701610ad7565b9250506040610b3186828701610ad7565b9150509250925092565b610b4481610ab8565b82525050565b5f602082019050610b5d5f830184610b3b565b92915050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b610b8b81610b63565b8114610b95575f80fd5b50565b5f81359050610ba681610b82565b92915050565b5f8115159050919050565b610bc081610bac565b8114610bca575f80fd5b50565b5f81359050610bdb81610bb7565b92915050565b5f805f8060808587031215610bf957610bf8610ab4565b5b5f610c0687828801610b98565b9450506020610c1787828801610ad7565b9350506040610c2887828801610ad7565b9250506060610c3987828801610bcd565b91505092959194509250565b610c4e81610b63565b82525050565b5f602082019050610c675f830184610c45565b92915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601260045260245ffd5b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f610cd182610ab8565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8203610d0357610d02610c9a565b5b600182019050919050565b5f606082019050610d215f830186610b3b565b610d2e6020830185610b3b565b610d3b6040830184610b3b565b949350505050565b5f610d4d82610ab8565b9150610d5883610ab8565b925082610d6857610d67610c6d565b5b828204905092915050565b5f610d7d82610ab8565b9150610d8883610ab8565b9250828201905080821115610da057610d9f610c9a565b5b9291505056fea2646970667358221220c13b948fb61d210c4446f495afc70eab2e7ce5a8024fb6586170eb747ca847dc64736f6c63430008140033",
+                "compilerName": "solc",
+                "compilerParameters": {
+                    "optimizerOn": false,
+                    "optimizerRuns": null,
+                    "type": "SolcParameters",
+                    "viaIR": false
+                },
+                "compilerVersion": "0.8.20",
+                "constructorBytecode": "608060405234801561000f575f80fd5b50610ddc8061001d5f395ff3fe608060405234801561000f575f80fd5b5060043610610034575f3560e01c80630af8b27f14610038578063bd80d87b14610068575b5f80fd5b610052600480360381019061004d9190610aeb565b610098565b60405161005f9190610b4a565b60405180910390f35b610082600480360381019061007d9190610be1565b6100ad565b60405161008f9190610c54565b60405180910390f35b5f6100a48484846100c4565b90509392505050565b5f6100ba858585856101bf565b9050949350505050565b5f64f196e500077fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000700005260037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000700015260497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0007000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000760025261016384848461027f565b90505f828061017557610174610c6d565b5b84860911156101b8577fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff81106101a9575f80fd5b80806101b490610cc7565b9150505b9392505050565b5f64f196e500007fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000000005260047fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00000001526102497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0000000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00006003528161026957610264858585610424565b610275565b610274858585610521565b5b9050949350505050565b5f64f196e5000d7fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000d00005260037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000d00015260497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000d000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000d6002525f805f198587098587029250828110838203039150505f810361034a578382816103405761033f610c6d565b5b049250505061041d565b838110610392578585856040517fa588cd5500000000000000000000000000000000000000000000000000000000815260040161038993929190610d0e565b60405180910390fd5b5f8486880990508281118203915080830392505f6001861901861690505f81870496508185049450600182835f0304019050808402851794505f60028860030218905080880260020381029050808802600203810290508088026002038102905080880260020381029050808802600203810290508088026002038102905080860296505050505050505b9392505050565b5f64f196e500037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000300005260037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000300015260497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0003000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00036002525f606060ff1683901b90505f6104d66104d18387610691565b610777565b90506105166105118773ffffffffffffffffffffffffffffffffffffffff168373ffffffffffffffffffffffffffffffffffffffff16610834565b610777565b925050509392505050565b5f64f196e500017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000100005260037fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000100015260497fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0001000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00016002525f606060ff1684901b90505f6105e1848773ffffffffffffffffffffffffffffffffffffffff16610912565b90508573ffffffffffffffffffffffffffffffffffffffff1684826106069190610d43565b03610649575f6106168284610834565b905061064161063c8873ffffffffffffffffffffffffffffffffffffffff1685846100c4565b610777565b935050610688565b61068561068083610670858a73ffffffffffffffffffffffffffffffffffffffff16610691565b8761067b9190610d73565b610a0f565b610777565b92505b50509392505050565b5f64f196e5000b7fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000b00005260027fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000b00015260097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000b000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000b6001525f820361075e576040517f378ee0ed00000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b81838161076e5761076d610c6d565b5b04905092915050565b5f64f196e5000e7fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000e00005260017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000e00015260017fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000e000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000e600052818291508173ffffffffffffffffffffffffffffffffffffffff161461082f575f80fd5b919050565b5f64f196e500097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000900005260027fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000900015260097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0009000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00096001525f828401905083811015610908576040517f5e88c46200000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b8091505092915050565b5f64f196e5000a7fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000a00005260027fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000a00015260097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000a000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000a6001525f83036109b5575f9050610a09565b5f8284029050828482816109cc576109cb610c6d565b5b0414610a04576040517f5e88c46200000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b809150505b92915050565b5f64f196e500087fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000800005260027fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff000800015260097fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff0008000552817fffffff6e4604afefe123321beef1b01fffffffffffffffffffffffff00086001525f8284061182840401905092915050565b5f80fd5b5f819050919050565b610aca81610ab8565b8114610ad4575f80fd5b50565b5f81359050610ae581610ac1565b92915050565b5f805f60608486031215610b0257610b01610ab4565b5b5f610b0f86828701610ad7565b9350506020610b2086828701610ad7565b9250506040610b3186828701610ad7565b9150509250925092565b610b4481610ab8565b82525050565b5f602082019050610b5d5f830184610b3b565b92915050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b610b8b81610b63565b8114610b95575f80fd5b50565b5f81359050610ba681610b82565b92915050565b5f8115159050919050565b610bc081610bac565b8114610bca575f80fd5b50565b5f81359050610bdb81610bb7565b92915050565b5f805f8060808587031215610bf957610bf8610ab4565b5b5f610c0687828801610b98565b9450506020610c1787828801610ad7565b9350506040610c2887828801610ad7565b9250506060610c3987828801610bcd565b91505092959194509250565b610c4e81610b63565b82525050565b5f602082019050610c675f830184610c45565b92915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601260045260245ffd5b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f610cd182610ab8565b91507fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8203610d0357610d02610c9a565b5b600182019050919050565b5f606082019050610d215f830186610b3b565b610d2e6020830185610b3b565b610d3b6040830184610b3b565b949350505050565b5f610d4d82610ab8565b9150610d5883610ab8565b925082610d6857610d67610c6d565b5b828204905092915050565b5f610d7d82610ab8565b9150610d8883610ab8565b9250828201905080821115610da057610d9f610c9a565b5b9291505056fea2646970667358221220c13b948fb61d210c4446f495afc70eab2e7ce5a8024fb6586170eb747ca847dc64736f6c63430008140033",
+                "constructorSrcmap": "127:573:0:-:0;;;;;;;;;;;;;;;;;;;",
+                "file": "certora/harness/InternalMathHarness.sol",
+                "immutables": [],
+                "internalFunctions": {
+                    "0xf196e50000": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "bool",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "getNextSqrtPriceBasedOnInput",
+                            "notpayable": true,
+                            "paramNames": [
+                                "_currentSqrtPriceX96",
+                                "_liquidity",
+                                "_amountRemaining",
+                                "direction"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50001": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "getNextPriceSqrtX96OnAmount0RoundingUp",
+                            "notpayable": true,
+                            "paramNames": [
+                                "_sqrtPriceX96",
+                                "_liquidity",
+                                "_amount"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50002": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint128",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "bool",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "calculateDeltaToken1",
+                            "notpayable": true,
+                            "paramNames": [
+                                "sqrtPriceAX96",
+                                "sqrtPriceBX96",
+                                "liquidity",
+                                "roundUp"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50003": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "getNextPriceSqrtX96OnAmount1RoundingUp",
+                            "notpayable": true,
+                            "paramNames": [
+                                "_sqrtPriceX96",
+                                "_liquidity",
+                                "_amount"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50004": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint128",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "bool",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "calculateDeltaToken0",
+                            "notpayable": true,
+                            "paramNames": [
+                                "sqrtPriceAX96",
+                                "sqrtPriceBX96",
+                                "liquidity",
+                                "roundUp"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50005": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "int128",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "calculateDeltaToken0",
+                            "notpayable": true,
+                            "paramNames": [
+                                "sqrtPriceAX96",
+                                "sqrtPriceBX96",
+                                "liquidity"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "int256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50006": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "int128",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "calculateDeltaToken1",
+                            "notpayable": true,
+                            "paramNames": [
+                                "sqrtPriceAX96",
+                                "sqrtPriceBX96",
+                                "liquidity"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "int256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50007": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "mulDivRoundingUp",
+                            "notpayable": true,
+                            "paramNames": [
+                                "a",
+                                "b",
+                                "denominator"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50008": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "divRoundingUp",
+                            "notpayable": true,
+                            "paramNames": [
+                                "numerator",
+                                "denominator"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50009": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "tryAdd",
+                            "notpayable": true,
+                            "paramNames": [
+                                "a",
+                                "b"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e5000a": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "tryMul",
+                            "notpayable": true,
+                            "paramNames": [
+                                "a",
+                                "b"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e5000b": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "tryDiv",
+                            "notpayable": true,
+                            "paramNames": [
+                                "a",
+                                "b"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e5000c": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "trySub",
+                            "notpayable": true,
+                            "paramNames": [
+                                "a",
+                                "b"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e5000d": {
+                        "canonicalId": "src/libraries/InternalMath.sol|InternalMath",
+                        "declaringContract": "InternalMath",
+                        "method": {
+                            "contractName": "InternalMath",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                },
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "mulDivision",
+                            "notpayable": true,
+                            "paramNames": [
+                                "x",
+                                "y",
+                                "denominator"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "2ea4be4a",
+                            "stateMutability": "pure",
+                            "visibility": "public"
+                        }
+                    },
+                    "0xf196e5000e": {
+                        "canonicalId": "src/libraries/SafeCast.sol|SafeCast",
+                        "declaringContract": "SafeCast",
+                        "method": {
+                            "contractName": "SafeCast",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "toUint160",
+                            "notpayable": true,
+                            "paramNames": [
+                                "y"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint160",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e5000f": {
+                        "canonicalId": "src/libraries/SafeCast.sol|SafeCast",
+                        "declaringContract": "SafeCast",
+                        "method": {
+                            "contractName": "SafeCast",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "int256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "toInt128",
+                            "notpayable": true,
+                            "paramNames": [
+                                "y"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "int128",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50010": {
+                        "canonicalId": "src/libraries/SafeCast.sol|SafeCast",
+                        "declaringContract": "SafeCast",
+                        "method": {
+                            "contractName": "SafeCast",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "toInt256",
+                            "notpayable": true,
+                            "paramNames": [
+                                "y"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "int256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    },
+                    "0xf196e50011": {
+                        "canonicalId": "src/libraries/SafeCast.sol|SafeCast",
+                        "declaringContract": "SafeCast",
+                        "method": {
+                            "contractName": "SafeCast",
+                            "fullArgs": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint256",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "isLibrary": true,
+                            "name": "toUint128",
+                            "notpayable": true,
+                            "paramNames": [
+                                "x"
+                            ],
+                            "returns": [
+                                {
+                                    "location": "stack",
+                                    "typeDesc": {
+                                        "primitiveName": "uint128",
+                                        "type": "Primitive"
+                                    }
+                                }
+                            ],
+                            "sighash": "0",
+                            "stateMutability": "pure",
+                            "visibility": "internal"
+                        }
+                    }
+                },
+                "is_static_address": false,
+                "lang": "Solidity",
+                "methods": [
+                    {
+                        "contractName": "InternalMathHarness",
+                        "fullArgs": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint160",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "bool",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "isLibrary": false,
+                        "name": "getNextSqrtPriceBasedOnInput",
+                        "notpayable": true,
+                        "paramNames": [
+                            "_currentSqrtPriceX96",
+                            "_liquidity",
+                            "_amountRemaining",
+                            "direction"
+                        ],
+                        "returns": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint160",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "sighash": "bd80d87b",
+                        "stateMutability": "pure",
+                        "visibility": "external"
+                    },
+                    {
+                        "contractName": "InternalMathHarness",
+                        "fullArgs": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            },
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "isLibrary": false,
+                        "name": "mulDivRoundingUp",
+                        "notpayable": true,
+                        "paramNames": [
+                            "a",
+                            "b",
+                            "denominator"
+                        ],
+                        "returns": [
+                            {
+                                "location": "stack",
+                                "typeDesc": {
+                                    "primitiveName": "uint256",
+                                    "type": "Primitive"
+                                }
+                            }
+                        ],
+                        "sighash": "0af8b27f",
+                        "stateMutability": "pure",
+                        "visibility": "external"
+                    }
+                ],
+                "name": "InternalMathHarness",
+                "original_file": "certora/harness/InternalMathHarness.sol",
+                "solidityTypes": [],
+                "srcmap": "127:573:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;516:181;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;162:348;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;516:181;607:14;642:48;672:1;675;678:11;642:29;:48::i;:::-;633:57;;516:181;;;;;:::o;162:348::-;324:34;377:126;432:20;454:10;466:16;484:9;377:41;:126::i;:::-;370:133;;162:348;;;;;;:::o;8798:637:2:-;8890:14;8993:13;8925:66;8918:89;9083:1;9015:66;9008:77;9161:2;9093:66;9086:78;9240:11;9172:66;9165:87;9272:30;9284:1;9287;9290:11;9272;:30::i;:::-;9263:39;;9344:1;9329:11;9316:25;;;;;:::i;:::-;;9326:1;9323;9316:25;:29;9312:117;;;9378:17;9369:6;:26;9361:35;;;;;;9410:8;;;;;:::i;:::-;;;;9312:117;8798:637;;;;;:::o;937:838::-;1128:34;1251:13;1183:66;1176:89;1341:1;1273:66;1266:77;1419:3;1351:66;1344:79;1499:9;1431:66;1424:85;1549:9;:219;;1678:90;1717:20;1739:10;1751:16;1678:38;:90::i;:::-;1549:219;;;1573:90;1612:20;1634:10;1646:16;1573:38;:90::i;:::-;1549:219;1520:248;;937:838;;;;;;:::o;12630:4813::-;12715:14;12818:13;12750:66;12743:89;12908:1;12840:66;12833:77;12986:2;12918:66;12911:78;13065:11;12997:66;12990:87;13373:13;13441;13574:1;13570:6;13567:1;13564;13557:20;13606:1;13603;13599:9;13590:18;;13657:5;13653:2;13650:13;13642:5;13638:2;13634:14;13630:34;13621:43;;13533:141;13760:1;13751:5;:10;13747:109;;13820:11;13812:5;:19;;;;;:::i;:::-;;;13805:26;;;;;;13747:109;13967:11;13958:5;:20;13954:105;;14030:1;14033;14036:11;14001:47;;;;;;;;;;;;;:::i;:::-;;;;;;;;13954:105;14359:17;14518:11;14515:1;14512;14505:25;14492:38;;14642:5;14631:9;14628:20;14621:5;14617:32;14608:41;;14682:9;14675:5;14671:21;14662:30;;15079:15;15127:1;15113:11;15112:12;:16;15097:11;:32;15079:50;;15143:22;15319:7;15306:11;15302:25;15287:40;;15421:7;15414:5;15410:19;15401:28;;15879:1;15869:7;15859;15856:1;15852:15;15848:29;15844:37;15826:55;;15982:14;15974:5;:22;15965:31;;;;16318:15;16356:1;16341:11;16337:1;:15;16336:21;16318:39;;16607:7;16593:11;:21;16589:1;:25;16578:36;;;;16676:7;16662:11;:21;16658:1;:25;16647:36;;;;16746:7;16732:11;:21;16728:1;:25;16717:36;;;;16816:7;16802:11;:21;16798:1;:25;16787:36;;;;16886:7;16872:11;:21;16868:1;:25;16857:36;;;;16957:7;16943:11;:21;16939:1;:25;16928:36;;;;17419:7;17411:5;:15;17402:24;;14716:2721;;;12731:4712;;;12630:4813;;;;;;:::o;2991:739::-;3146:24;3263:13;3195:66;3188:89;3353:1;3285:66;3278:77;3431:2;3363:66;3356:78;3510:7;3442:66;3435:83;3529:14;158:2:1;3546:34:2;;:7;:34;;3529:51;;3590:18;3611:38;:26;3618:6;3626:10;3611:6;:26::i;:::-;:36;:38::i;:::-;3590:59;;3678:45;:33;3685:13;3678:33;;3700:10;3678:33;;:6;:33::i;:::-;:43;:45::i;:::-;3659:64;;3176:554;;2991:739;;;;;:::o;1848:1137::-;2003:24;2120:13;2052:66;2045:89;2210:1;2142:66;2135:77;2288:2;2220:66;2213:78;2367:7;2299:66;2292:83;2386:17;158:2:1;2406:37:2;;:10;:37;;2386:57;;2454:15;2472:30;2479:7;2488:13;2472:30;;:6;:30::i;:::-;2454:48;;2567:13;2546:34;;2556:7;2546;:17;;;;:::i;:::-;:34;2542:437;;2596:19;2618:26;2625:7;2634:9;2618:6;:26::i;:::-;2596:48;;2677:67;:55;2694:13;2677:55;;2709:9;2720:11;2677:16;:55::i;:::-;:65;:67::i;:::-;2658:86;;2582:173;2542:437;;;2888:80;:68;2902:9;2923:32;2930:9;2941:13;2923:32;;:6;:32::i;:::-;2913:7;:42;;;;:::i;:::-;2888:13;:68::i;:::-;:78;:80::i;:::-;2869:99;;2542:437;2033:952;;1848:1137;;;;;:::o;11426:539::-;11487:14;11590:13;11522:66;11515:89;11680:1;11612:66;11605:77;11758:1;11690:66;11683:77;11836:1;11768:66;11761:77;11882:1;11877;:6;11873:49;;11892:30;;;;;;;;;;;;;;11873:49;11947:1;11943;:5;;;;;:::i;:::-;;;11936:12;;11426:539;;;;:::o;356:447:3:-;409:9;507:13;439:66;432:89;597:1;529:66;522:77;675:1;607:66;600:77;753:1;685:66;678:77;794:1;787;775:14;;;774:21;;;766:30;;;;;;356:447;;;:::o;10022:559:2:-;10083:14;10186:13;10118:66;10111:89;10276:1;10208:66;10201:77;10354:1;10286:66;10279:77;10432:1;10364:66;10357:77;10469:9;10485:1;10481;:5;10469:17;;10508:1;10504;:5;10500:42;;;10518:24;;;;;;;;;;;;;;10500:42;10563:1;10556:8;;;10022:559;;;;:::o;10704:598::-;10765:14;10868:13;10800:66;10793:89;10958:1;10890:66;10883:77;11036:1;10968:66;10961:77;11114:1;11046:66;11039:77;11160:1;11155;:6;11151:20;;11170:1;11163:8;;;;11151:20;11185:9;11201:1;11197;:5;11185:17;;11229:1;11224;11220;:5;;;;;:::i;:::-;;;:10;11216:47;;11239:24;;;;;;;;;;;;;;11216:47;11284:1;11277:8;;;10704:598;;;;;:::o;9441:575::-;9527:14;9630:13;9562:66;9555:89;9720:1;9652:66;9645:77;9798:1;9730:66;9723:77;9876:11;9808:66;9801:87;9997:1;9983:11;9972:9;9968:27;9965:34;9951:11;9940:9;9936:27;9932:68;9922:78;;9441:575;;;;:::o;88:117:4:-;197:1;194;187:12;334:77;371:7;400:5;389:16;;334:77;;;:::o;417:122::-;490:24;508:5;490:24;:::i;:::-;483:5;480:35;470:63;;529:1;526;519:12;470:63;417:122;:::o;545:139::-;591:5;629:6;616:20;607:29;;645:33;672:5;645:33;:::i;:::-;545:139;;;;:::o;690:619::-;767:6;775;783;832:2;820:9;811:7;807:23;803:32;800:119;;;838:79;;:::i;:::-;800:119;958:1;983:53;1028:7;1019:6;1008:9;1004:22;983:53;:::i;:::-;973:63;;929:117;1085:2;1111:53;1156:7;1147:6;1136:9;1132:22;1111:53;:::i;:::-;1101:63;;1056:118;1213:2;1239:53;1284:7;1275:6;1264:9;1260:22;1239:53;:::i;:::-;1229:63;;1184:118;690:619;;;;;:::o;1315:118::-;1402:24;1420:5;1402:24;:::i;:::-;1397:3;1390:37;1315:118;;:::o;1439:222::-;1532:4;1570:2;1559:9;1555:18;1547:26;;1583:71;1651:1;1640:9;1636:17;1627:6;1583:71;:::i;:::-;1439:222;;;;:::o;1667:126::-;1704:7;1744:42;1737:5;1733:54;1722:65;;1667:126;;;:::o;1799:122::-;1872:24;1890:5;1872:24;:::i;:::-;1865:5;1862:35;1852:63;;1911:1;1908;1901:12;1852:63;1799:122;:::o;1927:139::-;1973:5;2011:6;1998:20;1989:29;;2027:33;2054:5;2027:33;:::i;:::-;1927:139;;;;:::o;2072:90::-;2106:7;2149:5;2142:13;2135:21;2124:32;;2072:90;;;:::o;2168:116::-;2238:21;2253:5;2238:21;:::i;:::-;2231:5;2228:32;2218:60;;2274:1;2271;2264:12;2218:60;2168:116;:::o;2290:133::-;2333:5;2371:6;2358:20;2349:29;;2387:30;2411:5;2387:30;:::i;:::-;2290:133;;;;:::o;2429:759::-;2512:6;2520;2528;2536;2585:3;2573:9;2564:7;2560:23;2556:33;2553:120;;;2592:79;;:::i;:::-;2553:120;2712:1;2737:53;2782:7;2773:6;2762:9;2758:22;2737:53;:::i;:::-;2727:63;;2683:117;2839:2;2865:53;2910:7;2901:6;2890:9;2886:22;2865:53;:::i;:::-;2855:63;;2810:118;2967:2;2993:53;3038:7;3029:6;3018:9;3014:22;2993:53;:::i;:::-;2983:63;;2938:118;3095:2;3121:50;3163:7;3154:6;3143:9;3139:22;3121:50;:::i;:::-;3111:60;;3066:115;2429:759;;;;;;;:::o;3194:118::-;3281:24;3299:5;3281:24;:::i;:::-;3276:3;3269:37;3194:118;;:::o;3318:222::-;3411:4;3449:2;3438:9;3434:18;3426:26;;3462:71;3530:1;3519:9;3515:17;3506:6;3462:71;:::i;:::-;3318:222;;;;:::o;3546:180::-;3594:77;3591:1;3584:88;3691:4;3688:1;3681:15;3715:4;3712:1;3705:15;3732:180;3780:77;3777:1;3770:88;3877:4;3874:1;3867:15;3901:4;3898:1;3891:15;3918:233;3957:3;3980:24;3998:5;3980:24;:::i;:::-;3971:33;;4026:66;4019:5;4016:77;4013:103;;4096:18;;:::i;:::-;4013:103;4143:1;4136:5;4132:13;4125:20;;3918:233;;;:::o;4157:442::-;4306:4;4344:2;4333:9;4329:18;4321:26;;4357:71;4425:1;4414:9;4410:17;4401:6;4357:71;:::i;:::-;4438:72;4506:2;4495:9;4491:18;4482:6;4438:72;:::i;:::-;4520;4588:2;4577:9;4573:18;4564:6;4520:72;:::i;:::-;4157:442;;;;;;:::o;4605:185::-;4645:1;4662:20;4680:1;4662:20;:::i;:::-;4657:25;;4696:20;4714:1;4696:20;:::i;:::-;4691:25;;4735:1;4725:35;;4740:18;;:::i;:::-;4725:35;4782:1;4779;4775:9;4770:14;;4605:185;;;;:::o;4796:191::-;4836:3;4855:20;4873:1;4855:20;:::i;:::-;4850:25;;4889:20;4907:1;4889:20;:::i;:::-;4884:25;;4932:1;4929;4925:9;4918:16;;4953:3;4950:1;4947:10;4944:36;;;4960:18;;:::i;:::-;4944:36;4796:191;;;;:::o",
+                "storageLayout": {
+                    "storage": [],
+                    "types": null
+                },
+                "types": [],
+                "varmap": ""
+            }
+        ],
+        "legacyStructLinking": {},
+        "library_addresses": [],
+        "primary_contract": "InternalMathHarness",
+        "primary_contract_address": "00000000ce4604a0000000000000000000000003",
+        "prototypeFor": [],
+        "sdc_name": "InternalMathHarness.sol_0",
+        "sourceDir": ".post_autofinders.0",
+        "srclist": {
+            "0": "certora/harness/InternalMathHarness.sol",
+            "1": "src/libraries/FixedPoints.sol",
+            "2": "src/libraries/InternalMath.sol",
+            "3": "src/libraries/SafeCast.sol"
+        },
+        "state": {},
+        "structLinkingInfo": {}
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "importFilesToOrigRelpaths": {},
+    "primary_contract": "harnessWrapperCodeBase",
+    "specfile": "certora/spec/bitMathFVC.spec",
+    "specfileOrigRelpath": "certora/spec/bitMathFVC.spec",
+    "specfilesToImportDecls": {},
+    "type": "spec"
+}

@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import { mulDiv } from "./InternalMath.sol";
+// import { InternalMath } from "./InternalMath.sol";
+import { mulDiv } from "@prb-math/contracts/Common.sol";
 import { FixedPoint96, FixedPoint128 } from "./FixedPoints.sol";
 import { LiquidityMath } from "./LiquidityMath.sol";
 

@@ -194,7 +194,7 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
         // In here the msg.sender is the factory contract indeed.
         (factory, token0, token1, fee, tick_spacing) = IUniswapV3PoolDeployer(msg.sender).parameters();
         tickSpace = tick_spacing;
-        //@audit implementing maxLiquidity state variable.
+        //@audit-info implementing maxLiquidity state variable.
     }
 
 
@@ -454,7 +454,6 @@ contract UniswapV3SimulatorPool is ReentrancyGuard {
             }
         }
 
-        // @audit-info oracla functionality will change this scope.
         if (slot.tick != state.tick) {
             (uint16 newObservationIndex, uint16 newCardinality) = observations.write(
                 slot.observationIndex, slot.observationCardinality,
